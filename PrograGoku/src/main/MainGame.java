@@ -35,7 +35,7 @@ public class MainGame extends StateBasedGame {
 		AppGameContainer appGC;
 		try {
 			appGC = new AppGameContainer(new MainGame(gameName)); //screen
-			appGC.setDisplayMode(640, 480, false); //width, height, fullscreen?
+			appGC.setDisplayMode(1280, 720, false); //width, height, fullscreen?
 			appGC.start();
 		}
 		catch(SlickException ex) {

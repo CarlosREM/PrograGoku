@@ -16,7 +16,8 @@ public class GameScreen extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		
+		Image background = new Image("res/GameMap.png");
+		g.drawImage(background, 0, 0);
 	}
 
 	@Override

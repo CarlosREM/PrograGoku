@@ -3,44 +3,57 @@ package main;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
-import screen.*;
+import view.*;
 
 public class MainGame extends StateBasedGame {
+	public static final boolean debug = false;
+	
 	
 	public static final String gameName = "Train-magotchi";
+	public static AppGameContainer gameContainer;
+	// DIMENSIONS
+	public static final int screenWidth = 1280,
+							screenHeight = 720;
+	
+	// SCREENS
 	public static final int menuScreen = 0,
 							gameScreen = 1;
 	
+
 	
 	public MainGame(String gameName) {
 		super(gameName);
 		this.addState(new MenuScreen(menuScreen));
-		this.addState(new GameScreen(menuScreen));
+		this.addState(new GameScreen(gameScreen));
 	}
 
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
-		//load screens
+		/*/load screens
 		this.getState(menuScreen).init(gc, this);
 		this.getState(gameScreen).init(gc, this);
-		
+		*/
 		//starting screen
 		this.enterState(menuScreen);
+	}
+		
+	public static void startup() {
+		try {
+			gameContainer = new AppGameContainer(new MainGame(gameName)); //screen
+			gameContainer.setDisplayMode(screenWidth, screenHeight, false); //width, height, fullscreen?
+			gameContainer.setShowFPS(debug);
+			gameContainer.start();
+		}
+		catch(SlickException ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	// - - - -
 	
 	public static void main(String[] args) {
-		AppGameContainer appGC;
-		try {
-			appGC = new AppGameContainer(new MainGame(gameName)); //screen
-			appGC.setDisplayMode(1280, 720, false); //width, height, fullscreen?
-			appGC.start();
-		}
-		catch(SlickException ex) {
-			ex.printStackTrace();
-		}
+		MainGame.startup();
 	}
 	
 }

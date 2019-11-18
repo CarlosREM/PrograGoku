@@ -14,6 +14,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 	private boolean isHurt;
 	private int mentalHealth;
 	private int musculature;
+	private int fatigue;
 	private ArrayList<ASickness> sickness;	
 	
 	@Override

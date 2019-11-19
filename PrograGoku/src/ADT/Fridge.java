@@ -1,38 +1,32 @@
 package ADT;
 
 import java.util.HashMap;
+import java.util.Stack;
 
 import abstraction.IConsumable;
 
 public class Fridge {
-	private HashMap<String,IConsumable> consumables;
-	private HashMap<String,Integer> consumablesQuant;
+	private HashMap<String,Stack<IConsumable>> consumables;
 
 	public Fridge() {
-		this.consumables = new HashMap<String, IConsumable>();
-		this.consumablesQuant = new HashMap<String, Integer>();
+		this.consumables = new HashMap<>();
 	}
 	
-	public void addConsumable(String key, IConsumable value, int quantity) {
+	public void addConsumable(String key, IConsumable item, int quantity) {
 		if(!this.consumables.containsKey(key)) {
-			this.consumables.put(key, value);
-			this.consumablesQuant.put(key, quantity);
-		}else {
-			quantity += this.consumablesQuant.get(key);
-			this.consumablesQuant.put(key, quantity);
+			this.consumables.put(key,new Stack<IConsumable>());
+			}
+		while (quantity>0){
+			this.consumables.get(key).push(item);
+			quantity--;
 		}
-		
 	}
 	
 	public IConsumable getConsumable(String key) {
-		if(this.consumablesQuant.get(key)>0) {
-			return this.consumables.get(key);
-		}else {
-			return null;
-		}
+		return this.consumables.get(key).pop();
 	}
 	
-	public HashMap<String,Integer> getConsumablesQuantity() {
-		return this.consumablesQuant;
+	public HashMap<String,Stack<IConsumable>> getConsumables() {
+		return this.consumables;
 	}
 }

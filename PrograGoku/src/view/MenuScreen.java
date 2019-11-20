@@ -9,13 +9,20 @@ import org.newdawn.slick.state.*;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import ADT.GameState;
 import main.MainGame;
+import management.ClockManager;
 import management.SoundManager;
 
 public class MenuScreen extends BasicGameState {
 
 	private int stateId;
 	private String mouse = "No input";
+	private String clock = "";
+	private ClockManager clockManager;
+	private Thread clockThread;
+	private String day = "";
+	private String year = "";
 	
 	// RESOURCES
 	private Image background,
@@ -63,6 +70,10 @@ public class MenuScreen extends BasicGameState {
 				System.exit(0);
 			}
 		});		
+		clockManager = new ClockManager();
+		clockThread = new Thread(clockManager);
+		day = GameState.getInstance().getDayString();
+		year = GameState.getInstance().getYearString();
 	}
 
 	@Override
@@ -76,6 +87,9 @@ public class MenuScreen extends BasicGameState {
 		if (MainGame.debug) {
 			g.drawString(mouse, 10, 30);
 			g.drawString("Current State: " + getID(), 10, 50);
+			g.drawString(clock, 10, 70);
+			g.drawString(day, 10, 90);
+			g.drawString(year, 10, 110);
 		}
 		
 		//AUDIO
@@ -88,6 +102,13 @@ public class MenuScreen extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		if(!clockThread.isAlive())
+			clockThread.start();
+		
+		clock = clockManager.getClockString();
+		day = GameState.getInstance().getDayString();
+		year = GameState.getInstance().getYearString();
+		
 		if (MainGame.debug) {
 			int mouseX = Mouse.getX(),
 				mouseY = MainGame.screenHeight - Mouse.getY();
@@ -96,6 +117,7 @@ public class MenuScreen extends BasicGameState {
 		
 		for (MenuButton button : buttons)
 			checkButton(gc, button);
+		
 	}
 	
 	private void checkButton(GameContainer gc, MenuButton button) throws SlickException {

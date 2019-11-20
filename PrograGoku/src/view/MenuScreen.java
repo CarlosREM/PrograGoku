@@ -6,6 +6,8 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import main.MainGame;
 import management.SoundManager;
@@ -41,7 +43,7 @@ public class MenuScreen extends BasicGameState {
 								  res + "Menu_StartPressed.png") {
 			@Override
 			public void performAction() {
-				sbg.enterState(MainGame.gameScreen);
+				sbg.enterState(MainGame.gameScreen, new FadeOutTransition(), new FadeInTransition());
 			}
 		});
 		//btnLoad
@@ -65,20 +67,23 @@ public class MenuScreen extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		background.draw();	
+		gameTitle.draw();
+
+		for(MenuButton button : buttons)
+			button.draw();
+		
 		if (MainGame.debug) {
 			g.drawString(mouse, 10, 30);
 			g.drawString("Current State: " + getID(), 10, 50);
 		}
 		
-		background.draw();	
-		gameTitle.draw();
-
+		//AUDIO
 		
-		for(MenuButton button : buttons)
-			button.draw();
-		
-		if (SoundManager.getTrackName() != "menu")
+		if (SoundManager.getTrackName() != "menu") {
 			SoundManager.playMusic("menu");
+			SoundManager.setVolume(1);
+		}
 	}
 
 	@Override

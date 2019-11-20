@@ -1,14 +1,15 @@
-package ADT;
+package abstraction;
 import java.util.ArrayList;
 
+import ADT.ExtendedCharacter;
 import abstraction.*;
 
-public class Drug implements IConsumable{
+public abstract class ADrug implements IConsumable{
 	
-	public String name;
-	private ArrayList<ASickness> sickness;	
+	protected String name;
+	protected ArrayList<ASickness> sickness;	
 	
-	public Drug(String name) {
+	public ADrug(String name) {
 		this.name = name;
 		this.sickness = new ArrayList<>();
 	}
@@ -30,7 +31,7 @@ public class Drug implements IConsumable{
 	}
 
 	@Override
-	public void use(ExtendedCharacter character) {
+	public void visit(ExtendedCharacter character) {
 		for(ASickness s : character.getSickness()) {
 			if(this.sickness.contains(s)) {
 				character.getSickness().remove(s);

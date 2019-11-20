@@ -2,7 +2,6 @@ package abstraction;
 
 import ADT.ExtendedCharacter;
 
-public interface IConsumable {
-
-	public void use(ExtendedCharacter character);
+public interface IConsumable extends IVisitor {
+	
 }

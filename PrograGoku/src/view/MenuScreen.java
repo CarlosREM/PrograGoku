@@ -15,8 +15,8 @@ import management.ClockManager;
 import management.SoundManager;
 
 public class MenuScreen extends BasicGameState {
-
-	private int stateId;
+	private final int stateId;
+	
 	private String mouse = "No input";
 	private String clock = "";
 	private ClockManager clockManager;
@@ -25,7 +25,7 @@ public class MenuScreen extends BasicGameState {
 	private String year = "";
 	
 	// RESOURCES
-	private Image background,
+	private BigImage background,
 				  gameTitle;
 	
 	private List<MenuButton> buttons = new ArrayList<>();
@@ -40,8 +40,8 @@ public class MenuScreen extends BasicGameState {
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		background = new Sprite(res + "MenuBG.png", 0, 0);
-		gameTitle = new Sprite(res + "MenuTitle.png", MainGame.screenWidth/16, MainGame.screenHeight/9);
+		background = new BigImage(res + "MenuBG.png");
+		gameTitle = new BigImage(res + "MenuTitle.png");
 		
 		//btnStart
 		buttons.add(new MenuButton(MainGame.screenWidth/16, MainGame.screenHeight/9*6,
@@ -74,12 +74,14 @@ public class MenuScreen extends BasicGameState {
 		clockThread = new Thread(clockManager);
 		day = GameState.getInstance().getDayString();
 		year = GameState.getInstance().getYearString();
+		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		background.draw();	
-		gameTitle.draw();
+		
+		background.draw(0, 0);	
+		gameTitle.draw(MainGame.screenWidth/16, MainGame.screenHeight/9);
 
 		for(MenuButton button : buttons)
 			button.draw();

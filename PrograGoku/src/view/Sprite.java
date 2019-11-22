@@ -3,6 +3,8 @@ package view;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import ADT.FixedActivityCoord;
+
 public class Sprite extends Image {
 
 	private float x, y;
@@ -16,6 +18,11 @@ public class Sprite extends Image {
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public void setPosition(FixedActivityCoord position) {
+		this.x = position.x - this.width;
+		this.y = position.y - this.height;
 	}
 	
 	public Sprite(String path) throws SlickException {

@@ -23,58 +23,59 @@ public class MapCollisionManager {
 	public static void init() {
 		rectangles = new ArrayList<>();
 		
-		rectangles.add(new ColliderRect(0, 0, 32*60, 32*12)); 			//map top
-		rectangles.add(new ColliderRect(0, 32*35, 32*60, 32*5)); 		//map bottom
-		rectangles.add(new ColliderRect(0, 32*12, 32*2, 32*23)); 		//map left
-		rectangles.add(new ColliderRect(32*42, 32*12, 32*18, 32*14)); 	//map right - top
-		rectangles.add(new ColliderRect(32*42, 32*28, 32*18, 32*7)); 	//map right - bottom
+/*1*/	rectangles.add(new ColliderRect(0, 0, 32*60, 32*12)); 			//map top
+/*2*/	rectangles.add(new ColliderRect(0, 32*35, 32*60, 32*5)); 		//map bottom
+/*3*/	rectangles.add(new ColliderRect(0, 32*12, 32*2, 32*23)); 		//map left
+/*4*/	rectangles.add(new ColliderRect(32*42, 32*12, 32*18, 32*14)); 	//map right - top
+/*5*/	rectangles.add(new ColliderRect(32*42, 32*28, 32*18, 32*7)); 	//map right - bottom
 		
-		rectangles.add(new ColliderRect(32*2, 32*12, 32*9, 32*7)); 		//pool
+/*6*/	rectangles.add(new ColliderRect(32*2, 32*12, 32*9, 32*7)); 		//pool
 		
-		rectangles.add(new ColliderRect(32*9, 32*19, 32*2, 32*1 + 8)); 	//backyard sign
+/*7*/	rectangles.add(new ColliderRect(32*9, 32*19, 32*2, 32*1 + 8)); 	//backyard sign
 		
-		rectangles.add(new ColliderRect (32*2, 32*24, 32*3, 32*11)); 	//arena - left 
-		rectangles.add(new ColliderRect (32*5, 32*24, 32*3, 32*2)); 	//arena - top left
-		rectangles.add(new ColliderRect (32*5, 32*31, 32*3, 32*4)); 	//arena - bottom left 
-		rectangles.add(new ColliderRect (32*11, 32*24, 32*4, 32*2)); 	//arena - top right
-		rectangles.add(new ColliderRect (32*11, 32*31, 32*4, 32*2)); 	//arena - bottom right
-		rectangles.add(new ColliderRect (32*14, 32*26, 32*1, 32*5)); 	//arena - right 
+/*8*/	rectangles.add(new ColliderRect (32*2, 32*24, 32*3, 32*11)); 	//arena - left 
+/*9*/	rectangles.add(new ColliderRect (32*5, 32*24, 32*3, 32*2)); 	//arena - top left
+/*10*/	rectangles.add(new ColliderRect (32*5, 32*31, 32*3, 32*4)); 	//arena - bottom left 
+/*11*/	rectangles.add(new ColliderRect (32*11, 32*24, 32*4, 32*2)); 	//arena - top right
+/*12*/	rectangles.add(new ColliderRect (32*11, 32*31, 32*4, 32*2)); 	//arena - bottom right
+/*13*/	rectangles.add(new ColliderRect (32*14, 32*26, 32*1, 32*5)); 	//arena - right 
 
-		rectangles.add(new ColliderRect (32*17, 32*20, 32*2, 32*6)); 	//house - leftmost
-		rectangles.add(new ColliderRect (32*19, 32*20, 32*4, 32*3)); 	//house - backdoor
-		rectangles.add(new ColliderRect (32*22, 32*12, 32*20, 32*4-8));	//house - top
-		rectangles.add(new ColliderRect (32*22, 32*16-8, 32*1, 32*4+8));//house - bathroom left
-		rectangles.add(new ColliderRect (32*23, 32*17, 32*2-16, 32*3)); //house - bathroom bottom left
-		rectangles.add(new ColliderRect (32*26+16, 32*17, 32*3-16, 32*3)); //house - bathroom bottom right
-		rectangles.add(new ColliderRect (32*28, 32*16-8, 32*1, 32*1+8)); //house - bathroom right
-		rectangles.add(new ColliderRect (32*25, 32*21+6, 32*3, 32*2-12));//house - sofa
-		rectangles.add(new ColliderRect (32*31, 32*17, 32*5, 32*2)); 	//house - table
-		rectangles.add(new ColliderRect (32*31, 32*19, 32*11, 32*3)); 	//house - bedroom top & frontdoor
-		rectangles.add(new ColliderRect (32*31, 32*22, 32*1, 32*2)); 	//house - bedroom left
-		rectangles.add(new ColliderRect (32*34, 32*22, 32*1, 32*1)); 	//house - nightstand
-		rectangles.add(new ColliderRect (32*35, 32*22, 32*2, 32*2)); 	//house - bed
-		rectangles.add(new ColliderRect (32*37, 32*22, 32*2, 32*4)); 	//house - frontdoor left
-		rectangles.add(new ColliderRect (32*17, 32*26, 32*22, 32*4)); 	//house - bottom
-		
-		rectangles.add(new ColliderRect (32*16, 32*31, 32*9, 32*4)); 	//garden - left 
-		rectangles.add(new ColliderRect (32*28, 32*32, 32*1, 32*3)); 	//garden - middle fence left 
-		rectangles.add(new ColliderRect (32*32, 32*32, 32*1, 32*3)); 	//garden - middle fence right 
-		rectangles.add(new ColliderRect (32*36, 32*31, 32*6, 32*4)); 	//garden - right
+/*14*/	rectangles.add(new ColliderRect (32*17, 32*20, 32*2, 32*6)); 	//house - leftmost
+/*15*/	rectangles.add(new ColliderRect (32*19, 32*20, 32*4, 32*3)); 	//house - backdoor
+/*16*/	rectangles.add(new ColliderRect (32*22, 32*12, 32*20, 32*4-8));	//house - top
+/*17*/	rectangles.add(new ColliderRect (32*22, 32*16-8, 32*1, 32*4+8));//house - bathroom left
+/*18*/	rectangles.add(new ColliderRect (32*23, 32*17, 32*2-16, 32*3)); //house - bathroom bottom left
+/*19*/	rectangles.add(new ColliderRect (32*26+16, 32*17, 32*3-16, 32*3)); //house - bathroom bottom right
+/*20*/	rectangles.add(new ColliderRect (32*28, 32*16-8, 32*1, 32*1+8)); //house - bathroom right
+/*21*/	rectangles.add(new ColliderRect (32*25, 32*21+6, 32*3, 32*2-12));//house - sofa
+/*22*/	rectangles.add(new ColliderRect (32*31, 32*17, 32*5, 32*2)); 	//house - table
+/*23*/	rectangles.add(new ColliderRect (32*31, 32*19, 32*11, 32*3)); 	//house - bedroom top & frontdoor
+/*24*/	rectangles.add(new ColliderRect (32*31, 32*22, 32*1, 32*2)); 	//house - bedroom left
+/*25*/	rectangles.add(new ColliderRect (32*34, 32*22, 32*1, 32*1)); 	//house - nightstand
+/*26*/	rectangles.add(new ColliderRect (32*35, 32*22, 32*2, 32*2)); 	//house - bed
+/*27*/	rectangles.add(new ColliderRect (32*37, 32*22, 32*2, 32*4)); 	//house - frontdoor left
+/*28*/	rectangles.add(new ColliderRect (32*17, 32*26, 32*22, 32*4)); 	//house - bottom
+	
+/*29*/	rectangles.add(new ColliderRect (32*16, 32*31, 32*9, 32*4)); 	//garden - left 
+/*30*/	rectangles.add(new ColliderRect (32*28, 32*32, 32*1, 32*3)); 	//garden - middle fence left 
+/*31*/	rectangles.add(new ColliderRect (32*32, 32*32, 32*1, 32*3)); 	//garden - middle fence right 
+/*32*/	rectangles.add(new ColliderRect (32*36, 32*31, 32*6, 32*4)); 	//garden - right
 	}
 	
 	public static boolean checkCollision(ColliderRect playerRect, float xOffset, float yOffset) {
 		boolean collision = false;
-		float rectX, rectY;
-		int i = 1;
+		float rectX1, rectX2, rectY2, rectY1;
+		
 		for (ColliderRect rect : rectangles) {
-			rectX = rect.getX() + xOffset;
-			rectY =  rect.getY() + yOffset;
-			collision = playerRect.checkCollision(rectX, rectX + rect.getW(), rectY, rectY + rect.getH());
+			rectX1 = rect.getX() + xOffset;
+			rectX2 = rectX1 + rect.getW();
+			rectY1 = rect.getY() + yOffset;
+			rectY2 = rectY1 + rect.getH();
+			
+			collision = playerRect.checkCollision(rectX1, rectX2, rectY1, rectY2);
 			if (collision)
-				break;
-			i++;
+					break;
 		}
-		//System.out.println(i);
 		return collision;
 	}
 	

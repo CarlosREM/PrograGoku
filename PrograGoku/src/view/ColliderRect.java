@@ -30,6 +30,11 @@ public class ColliderRect {
 		this.y = y;
 	}
 
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	public float getW() {
 		return w;
 	}
@@ -69,29 +74,36 @@ public class ColliderRect {
 		this.h = h;
 	}
 	
+	public ColliderRect(float w, float h) {
+		this.x = 0;
+		this.y = 0;
+		this.w = w;
+		this.h = h;
+	}
 	
-	public boolean[] checkCollision(ColliderRect rect) {
+	public boolean checkCollision(ColliderRect rect) {
 		boolean up = rect.getY2() < this.getY(),
 				down = this.getY2() < rect.getY(),
 				left = rect.getX2() < this.getX(),
 				right = this.getX2() < rect.getX();
 		
-		return new boolean[] { !up, !down, !left, !right};
+		return !(up || down || left || right);
 	}
 	
 	public boolean checkCollision(float x1, float x2, float y1, float y2) {
-		/*
-		System.out.println("Collisions:"
-				 + "\n\tUP: " + y2 +" < "+ this.getY()
-				 + "\n\tDOWN: " + this.getY2() + " < " + y1
-				 + "\n\tLEFT: " + x2 + " < " + this.getX()
-				 + "\n\tRIGHT: " + this.getX2() + " < " + x1);
-		*/
-		boolean up = y2 < this.getY(),
+		
+		boolean up = this.getY() > y2,
 				down = this.getY2() < y1,
-				left = x2 < this.getX(),
+				left = this.getX() > x2,
 				right = this.getX2() < x1;
 		
+		/*
+		System.out.println("Collisions (Player | Rect)"
+						 + "\n\tUP: " + y2 +" > "+ this.getY() + " = " + up
+						 + "\n\tDOWN: " + this.getY2() + " > " + y1 + " = " + down
+						 + "\n\tLEFT: " + x2 + " > " + this.getX() + " = " + left
+						 + "\n\tRIGHT: " + this.getX2() + " > " + x1 + " = " + right);
+		*/
 		return !(up || down || left || right);
 	}
 	

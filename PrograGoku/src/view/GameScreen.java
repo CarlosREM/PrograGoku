@@ -25,7 +25,7 @@ public class GameScreen extends BasicGameState {
 	private static boolean paused = false;
 	public static void setPaused(boolean state) {
 		paused = state;
-		musicVolume = (paused) ? 0.1f : 0.0f ;
+		musicVolume = (paused) ? 0.1f : 0.3f ;
 	}
 	private static Color pausedTint = new Color(0, 0, 0, 175); //r, g, b, alpha
 	
@@ -34,17 +34,13 @@ public class GameScreen extends BasicGameState {
 	
 	private float camX, camY,
 				  maxCamX, maxCamY,
-				  camMoveSpeed = 0.5f;
-	private final float camStartingX = 1088,
-					    camStartingY = 714;
+				  camMoveSpeed = 0.8f;
 	
 	// CHARACTER INFO
 	private AnimatedSprite character;
 	private ColliderRect playerCollider;
-	private BigImage moveCursor;
 	private float charMoveX, charMoveY,
-				  charMoveSpeed = 0.2f;
-	
+				  charMoveSpeed = 0.5f;
 	
 	private boolean lockPosition = false;
 	public void setLockPosition(boolean state) { lockPosition = state; }
@@ -73,15 +69,18 @@ public class GameScreen extends BasicGameState {
 		setLockPosition(false);
 		musicState = 0;
 		
-		camX = -camStartingX + MainGame.screenWidth/2;
-		camY = -camStartingY + MainGame.screenHeight/2;
+		camX = -(FixedActivityCoord.ACTION_BED.x) + MainGame.screenWidth/2;
+		camY = -(FixedActivityCoord.ACTION_BED.y + 32) + MainGame.screenHeight/2;
 		
-		character.setPosition(MainGame.screenWidth/2, MainGame.screenHeight/2);
+		playerCollider.setPosition(MainGame.screenWidth/2 - playerCollider.getW()/2,
+								   MainGame.screenHeight/2 - playerCollider.getH()/2);
 		
-		charMoveX = character.getX();
-		charMoveY = character.getY();
+		character.setIdle(true);
+		character.setPosition(playerCollider.getCenterX() - character.getWidth()/2,
+	  			  			  playerCollider.getY2() - character.getHeight());
 		
-		
+		charMoveX = playerCollider.getCenterX();
+		charMoveY = playerCollider.getCenterY();
 	}
 	
 	@Override
@@ -89,18 +88,16 @@ public class GameScreen extends BasicGameState {
 		background = new BigImage(res + "GameMap.png");
 		
 		maxCamX = -1*background.getWidth() + MainGame.screenWidth;
-		maxCamY = -1*background.getHeight() + MainGame.screenHeight;
+		maxCamY = -1*background.getHeight() + MainGame.screenHeight - (GameOverlay.getHeight()-10);
 
 		character = new AnimatedSprite(res + "spr_character.png", 32, 48, 120);
-		character.setPosition(FixedActivityCoord.ACTION_BED);
-
-		playerCollider = new ColliderRect(character.getX() + 2, character.getY() + character.getHeight() - 16, 28, 14);
-		
-		//moveCursor = new BigImage(res + "movePointer.png");
-		
+		playerCollider = new ColliderRect(28, 14);
+				
 		MapCollisionManager.init();
 		
 		musicTracks = new String[] {"daytime", "nighttime", "battle"};
+		
+		GameOverlay.init();
 	}
 
 	@Override
@@ -113,15 +110,17 @@ public class GameScreen extends BasicGameState {
 			MapCollisionManager.draw(g, camX, camY);
 		
 		if (!character.isIdle()) {
-			//System.out.println("POINTER AT X:"+charMoveX+" - Y:"+charMoveY);
-			//g.drawImage(moveCursor, charMoveX, charMoveY);
+			g.setColor(Color.red);
+			g.fillOval(charMoveX-8, charMoveY-4, 16, 8);
+			g.setColor(Color.white);
 		}
 		
 		playerCollider.draw(g);
 		character.draw();
 		
 		// UI OVERLAY 
-		
+		GameOverlay.drawTime(g);
+		GameOverlay.drawPlayerStats(g);
 		
 		// PAUSED
 		if (paused) {
@@ -186,113 +185,111 @@ public class GameScreen extends BasicGameState {
 		if (!paused){
 			moveCamera(mouseX, mouseY);
 			checkCharacterMove(input);
-			checkCharacterCollision();
 			moveCharacter();
-			playerCollider.setX(character.getX() + 2);
-			playerCollider.setY(character.getY() + character.getHeight() - 16);
+			checkCharacterCollision();
 		}
 	}
 
 	private void moveCamera(int mouseX, int mouseY) {
 		if (mouseX < 30 && camX < 0) {
 			camX += camMoveSpeed;
-			character.setX(character.getX() + camMoveSpeed);
+			playerCollider.setX(playerCollider.getX() + camMoveSpeed);
 			charMoveX += camMoveSpeed;
 		}
 		else if (mouseX > MainGame.screenWidth-30 && camX > maxCamX) {
 			camX -= camMoveSpeed;
-			character.setX(character.getX() - camMoveSpeed);
+			playerCollider.setX(playerCollider.getX() - camMoveSpeed);
 			charMoveX -= camMoveSpeed;
 		}
 		
 		if (mouseY < 30 && camY < 0) {
 			camY += camMoveSpeed;
-			character.setY(character.getY() + camMoveSpeed);
+			playerCollider.setY(playerCollider.getY() + camMoveSpeed);
 			charMoveY += camMoveSpeed;
 		}
 		else if (mouseY > MainGame.screenHeight-30 && camY > maxCamY) {
 			camY -= camMoveSpeed;
-			character.setY(character.getY() - camMoveSpeed);
+			playerCollider.setY(playerCollider.getY() - camMoveSpeed);
 			charMoveY -= camMoveSpeed;
 		}
 	}
 	
 	private void checkCharacterMove(Input input) {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-			charMoveX = input.getMouseX() - character.getWidth()/2;
-			charMoveY= input.getMouseY() - character.getHeight()/2;
-			
-		}
-	}
-	
-	private void checkCharacterCollision() {
-		boolean collision = MapCollisionManager.checkCollision(playerCollider, camX, camY);
-		
-		if (collision) {
-			float charY = character.getY(),
-				  charX = character.getX();
-			if (charMoveY < charY) { //UP
-				charY += charMoveSpeed*10;
-				character.setY(charY);
-				charMoveY = charY;
-			}
-			else if (charY < charMoveY) { // DOWN
-				charY -= charMoveSpeed*10;
-				character.setY(charY);
-				charMoveY = charY;
-			}
-			
-			else if (charMoveX < charX) { // LEFT
-				charX += charMoveSpeed*10;
-				character.setX(charX);
-				charMoveX = charX;
-			}
-			else if (charX < charMoveX) { // RIGHT
-				charX -= charMoveSpeed*10;
-				character.setX(charX);
-				charMoveX = charX;
-			}
-			
-
+			charMoveX = input.getMouseX();
+			charMoveY= input.getMouseY();
 		}
 	}
 	
 	private void moveCharacter() {
 		boolean idle = true;
 
-		float charX = character.getX(),
-			  charY = character.getY(),
+		float charX = playerCollider.getCenterX(),
+			  charY = playerCollider.getCenterY(),
 			  distX = Math.abs(charMoveX - charX),
 			  distY = Math.abs(charMoveY - charY);
+		
 		if (!lockPosition && (distX > charMoveSpeed || distY > charMoveSpeed)) {
 			idle = false;
 			
-
-			if (charY > charMoveY) {
-				character.setY(charY - charMoveSpeed);
-				if (distY > distX)
-					character.setCurrentAnimation(1); // look up
-			}
-			else if (charY < charMoveY) {
-				character.setY(charY + charMoveSpeed);
-				if (distY > distX)
-					character.setCurrentAnimation(0); // look down
-			}
-
-			if (charX > charMoveX) {
-				character.setX(charX - charMoveSpeed);
-				if (distX > distY)
+			if (distX > charMoveSpeed) {
+				if (charMoveX < charX) { // LEFT
+					playerCollider.setX(playerCollider.getX() - charMoveSpeed);
 					character.setCurrentAnimation(2); // look left
+				}
+				
+				else if (charX < charMoveX) { // RIGHT
+					playerCollider.setX(playerCollider.getX() + charMoveSpeed);
+					character.setCurrentAnimation(3); // look right
+				}
 			}
 			
-			else if (charX < charMoveX) {
-				character.setX(charX + charMoveSpeed);
-				if (distX > distY)
-					character.setCurrentAnimation(3); // look right
+			else if (distY > charMoveSpeed) {
+				if (charY < charMoveY) { // DOWN
+					playerCollider.setY(playerCollider.getY() + charMoveSpeed);
+					character.setCurrentAnimation(0); // look down
+				}
+				else if (charMoveY < charY) { // UP
+					playerCollider.setY(playerCollider.getY() - charMoveSpeed);
+					character.setCurrentAnimation(1); // look up
+				}
 			}
+			
 		}
+		
+		if (distX <= charMoveSpeed)
+			playerCollider.setX(charMoveX - playerCollider.getW()/2);
+		if (distY <= charMoveSpeed)
+			playerCollider.setY(charMoveY - playerCollider.getH()/2);
+
+		character.setPosition(playerCollider.getCenterX() - character.getWidth()/2,
+				  			  playerCollider.getY2() - character.getHeight());
 		character.setIdle(idle);
 	}
+
+	private void checkCharacterCollision() {
+		boolean collision = MapCollisionManager.checkCollision(playerCollider, camX, camY);
+		
+		if (collision) {
+			
+			if (playerCollider.getCenterX() > charMoveX) //LEFT
+				playerCollider.setX(playerCollider.getX() + 1);
+		
+			else if (playerCollider.getCenterX() < charMoveX) // RIGHT
+				playerCollider.setX(playerCollider.getX() - 1);
+		
+			if (playerCollider.getCenterY() > charMoveY) // UP
+				playerCollider.setY(playerCollider.getY() + 1);
+
+			else if (playerCollider.getCenterY() < charMoveY) // DOWN
+				playerCollider.setY(playerCollider.getY() - 1);
+
+			
+			charMoveX = playerCollider.getCenterX();
+			charMoveY = playerCollider.getCenterY();
+		}
+	}
+	
 	
 	@Override
 	public int getID() {

@@ -8,6 +8,7 @@ import view.*;
 public class MainGame extends StateBasedGame {
 	public static final boolean debug = true;
 	
+	public static final int FPS = 180;
 	
 	public static final String gameName = "Train-magotchi";
 	public static AppGameContainer gameContainer;
@@ -24,7 +25,6 @@ public class MainGame extends StateBasedGame {
 		super(gameName);
 		this.addState(new MenuScreen(menuScreen));
 		this.addState(GameScreen.getInstance());
-		
 	}
 
 
@@ -39,7 +39,7 @@ public class MainGame extends StateBasedGame {
 			gameContainer = new AppGameContainer(new MainGame(gameName)); //screen
 			gameContainer.setDisplayMode(screenWidth, screenHeight, false); //width, height, fullscreen?
 			gameContainer.setShowFPS(debug);
-			gameContainer.setTargetFrameRate(180);
+			gameContainer.setTargetFrameRate(FPS);
 			gameContainer.start();
 		}
 		catch(SlickException ex) {

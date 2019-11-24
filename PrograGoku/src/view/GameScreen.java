@@ -5,8 +5,9 @@ import org.newdawn.slick.state.*;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import ADT.FixedActivityCoord;
 import main.MainGame;
+import management.ActionSpotManager;
+import management.FixedActivityCoord;
 import management.MapCollisionManager;
 import management.SoundManager;
 
@@ -94,6 +95,7 @@ public class GameScreen extends BasicGameState {
 		playerCollider = new ColliderRect(28, 14);
 				
 		MapCollisionManager.init();
+		ActionSpotManager.init();
 		
 		musicTracks = new String[] {"daytime", "nighttime", "battle"};
 		
@@ -109,6 +111,9 @@ public class GameScreen extends BasicGameState {
 		if (MainGame.debug)
 			MapCollisionManager.draw(g, camX, camY);
 		
+		// ACTION SPOTS
+		ActionSpotManager.draw(g, camX, camY);
+
 		if (!character.isIdle()) {
 			g.setColor(Color.red);
 			g.fillOval(charMoveX-8, charMoveY-4, 16, 8);
@@ -117,17 +122,22 @@ public class GameScreen extends BasicGameState {
 		
 		playerCollider.draw(g);
 		character.draw();
+
+		// PAUSED
+		if (paused) {
+			g.setColor(pausedTint);
+			g.fillRect(0, 0, MainGame.screenWidth, MainGame.screenHeight);
+			
+			g.setColor(Color.white);
+			g.drawString("PAUSED", MainGame.screenWidth/2 - 27, MainGame.screenHeight/3);
+			g.drawString("[ENTER] - Resume", MainGame.screenWidth/2 - 76, MainGame.screenHeight/3 + 32);
+			g.drawString("[ESC] - Exit", MainGame.screenWidth/2 - 58, MainGame.screenHeight/3 + 64);
+		}
 		
 		// UI OVERLAY 
 		GameOverlay.drawTime(g);
 		GameOverlay.drawPlayerStats(g);
 		
-		// PAUSED
-		if (paused) {
-			g.setColor(pausedTint);
-			g.fillRect(0, 0, MainGame.screenWidth, MainGame.screenHeight);
-			g.setColor(Color.white);
-		}
 		
 		// DEBUG INFO
 		if (MainGame.debug) {
@@ -161,32 +171,18 @@ public class GameScreen extends BasicGameState {
 		if (MainGame.debug) {
 			strMouse = "[MOUSE] X:" + mouseX + " - Y:" + mouseY;
 			strCam = "[CAM] X:" + camX + " - Y:" + camY;
-			strPosition = "[CHAR POS] X:" + character.getX() + " - Y:" + character.getY();
+			strPosition = "[CHAR POS] X:" + playerCollider.getCenterX() + " - Y:" + playerCollider.getCenterY();
 			strMoving = "[MOVING TO] X:" + charMoveX + " - Y: " + charMoveY;
 		}
 
-		
-		if (input.isKeyDown(Input.KEY_ESCAPE)) {
-				sbg.enterState(MainGame.menuScreen, new FadeOutTransition(), new FadeInTransition());
-		}
-		
-		else if (input.isKeyPressed(Input.KEY_SPACE)) {
-			musicState++;
-			if (musicState == 3)
-				musicState = 0;
-		}
-		
-		else if (input.isKeyPressed(Input.KEY_ENTER)) {
-			setLockPosition(!paused);
-			setPaused(!paused);
-			SoundManager.setVolume(musicVolume);
-		}
-		
+		checkKeyboardInteraction(input, sbg);
+				
 		if (!paused){
 			moveCamera(mouseX, mouseY);
 			checkCharacterMove(input);
 			moveCharacter();
 			checkCharacterCollision();
+			checkCharacterInteraction();
 		}
 	}
 
@@ -290,6 +286,32 @@ public class GameScreen extends BasicGameState {
 		}
 	}
 	
+	private void checkCharacterInteraction() throws SlickException {
+		if (ActionSpotManager.checkInteraction(playerCollider, camX, camY)) {
+			charMoveX = playerCollider.getCenterX();
+			charMoveY = playerCollider.getCenterY();
+		}
+	}
+	
+	private void checkKeyboardInteraction(Input input, StateBasedGame sbg) {
+		if (input.isKeyPressed(Input.KEY_ENTER)) {
+			setLockPosition(!paused);
+			character.setIdle(!paused);
+			setPaused(!paused);
+			SoundManager.setVolume(musicVolume);
+		}
+		
+		if (paused && input.isKeyPressed(Input.KEY_ESCAPE)) {
+			sbg.enterState(MainGame.menuScreen, new FadeOutTransition(), new FadeInTransition());
+		}
+		
+		if (MainGame.debug && input.isKeyPressed(Input.KEY_M)) {
+			musicState++;
+			if (musicState == 3)
+				musicState = 0;
+		}
+	}
+
 	
 	@Override
 	public int getID() {

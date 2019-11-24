@@ -3,7 +3,7 @@ package view;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import ADT.FixedActivityCoord;
+import management.FixedActivityCoord;
 
 public class Sprite extends Image {
 

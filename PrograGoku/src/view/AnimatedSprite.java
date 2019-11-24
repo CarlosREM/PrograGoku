@@ -8,7 +8,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
-import ADT.FixedActivityCoord;
+import management.FixedActivityCoord;
 
 public class AnimatedSprite {
 

@@ -2,9 +2,9 @@ package Activities;
 
 import java.util.ArrayList;
 
-import ADT.FixedActivityCoord;
 import abstraction.ASickness;
 import abstraction.IVisitor;
+import management.FixedActivityCoord;
 
 public abstract class AActivity implements IVisitor {
 	

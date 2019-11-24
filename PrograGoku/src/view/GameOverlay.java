@@ -1,33 +1,16 @@
 package view;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.BigImage;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.util.ResourceLoader;
 
+import abstraction.ASickness;
 import main.MainGame;
+import management.UIManager;
 
-public class GameOverlay {
-	
-	private static final Color transpBlackColor = new Color(50, 50, 50, 100),
-							   borderColor = new Color(104, 8, 40), 	//#63411C
-							   mainColor = new Color(248, 248, 192), 	//#F8D088
-							   textColor = new Color(177, 85, 46), 		//#461715
-							   barColor = new Color(13, 158, 54), 		//#0B9F36
-							   fitGreenColor = new Color(6, 194, 69),
-							   fitYellowColor = new Color(243, 234, 44),
-							   fitRedColor = new Color(232, 8, 24);
-	
-	private static final String res = "res/images/game/";
+public class GameOverlay extends UIManager {
 	
 	private static final int height = 160;
 	public static int getHeight() { return height; }
@@ -50,9 +33,37 @@ public class GameOverlay {
 	
 	private static List<String> sicknesses;
 	
-	
-	public static void init() throws SlickException {
-		sicknesses = new ArrayList<>();
+	public static void setTime(String time) { GameOverlay.time = time; }
+
+	public static void setDate(String date) { GameOverlay.date = date; }
+
+	public static void setStatFeeling(String statFeeling) {	GameOverlay.statFeeling = statFeeling; }
+
+	public static void setStatEnergy(int statEnergy) { GameOverlay.statEnergy = statEnergy; }
+
+	public static void setStatSleep(int statSleep) { GameOverlay.statSleep = statSleep; }
+
+	public static void setStatToilet(int statToilet) { GameOverlay.statToilet = statToilet;	}
+
+	public static void setStatHunger(int statHunger) {	GameOverlay.statHunger = statHunger; }
+
+	public static void setStatMental(int statMental) { GameOverlay.statMental = statMental;	}
+
+	public static void setStatFitness(int statFitness) { GameOverlay.statFitness = statFitness;	}
+
+	public static void setSicknesses(List<String> sicknesses) {	GameOverlay.sicknesses = sicknesses; }
+
+	public static void init(String statFeeling, int statEnergy, int statSleep,
+							int statToilet, int statHunger, int statMental,
+							int statFitness, List<ASickness> sicknesses) throws SlickException {
+		GameOverlay.statFeeling = statFeeling;
+		GameOverlay.statEnergy = statEnergy;
+		GameOverlay.statSleep = statSleep;
+		GameOverlay.statToilet = statToilet;
+		GameOverlay.statHunger = statHunger;
+		GameOverlay.statMental = statMental;
+		GameOverlay.statFitness = statFitness;
+		GameOverlay.sicknesses = new ArrayList<>();
 	}
 	
 	public static void drawTime(Graphics g) {
@@ -135,11 +146,7 @@ public class GameOverlay {
 		g.fillRect(offsetX, offsetY, 4, height - borderWidth*5);
 		offsetX += 4 + 32;
 		
-		// ENFERMEDADES
-		if (sicknesses.isEmpty()) {
-			for (int n = 0; n < 6; n++)
-				sicknesses.add("AIDS");
-		}
+		// SICKNESSES
 		g.setColor(textColor);
 		g.drawString("Sicknesses: ", offsetX, offsetY);
 		if (sicknesses.isEmpty())
@@ -166,11 +173,11 @@ public class GameOverlay {
 		
 		g.setColor(transpBlackColor);
 		g.fillRoundRect(offsetX, offsetY + 32, 180, 40, 5);
-		g.setColor(fitGreenColor);
+		g.setColor(greenColor);
 		g.fillRoundRect(offsetX + 5, offsetY + 32 + 5, 180 - 10, 40 - 10, 5);
-		g.setColor(fitRedColor);
+		g.setColor(redColor);
 		g.fillRoundRect(offsetX + 5, offsetY + 32 + 5, 65, 40 - 10, 5);
-		g.setColor(fitYellowColor);
+		g.setColor(yellowColor);
 		g.fillRect(offsetX + 5 + 60, offsetY + 32 + 5, 55, 40 - 10);
 		
 		g.setColor(Color.white);

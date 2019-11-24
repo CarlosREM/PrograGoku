@@ -1,10 +1,17 @@
 package management;
 
 import ADT.GameState;
+import view.GameOverlay;
 
 public class ClockManager implements Runnable {
 	
-	private static int clockUpdateLapse = 100;
+	private boolean stop = false;
+	public void stop() { stop = true; }
+	
+	private boolean paused = false;
+	public void setPause(boolean state) { paused = state; }
+	
+	private static int clockUpdateLapse = 500;
 	private int minutes = 0;
 	private int hours = 0;
 	
@@ -34,13 +41,24 @@ public class ClockManager implements Runnable {
 	
 	@Override
 	public void run() {
-		while(true) {
+		GameOverlay.setDate(GameState.getInstance().getDateString());
+		GameOverlay.setTime(getClockString());
+		
+		while(!stop) {
 			try {
 				Thread.sleep(clockUpdateLapse);
-				if(increaseTime())
-					GameState.getInstance().increaseDay();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				if (!paused) {
+						if(increaseTime()) {
+							GameState.getInstance().increaseDay();
+							GameOverlay.setDate(GameState.getInstance().getDateString());
+						}
+						GameOverlay.setTime(getClockString());
+						
+						//demas acciones
+	
+				}
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}

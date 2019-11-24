@@ -6,7 +6,7 @@ import org.newdawn.slick.state.*;
 import view.*;
 
 public class MainGame extends StateBasedGame {
-	public static final boolean debug = true;
+	public static boolean debug = false;
 	
 	public static final int FPS = 180;
 	
@@ -38,7 +38,7 @@ public class MainGame extends StateBasedGame {
 		try {
 			gameContainer = new AppGameContainer(new MainGame(gameName)); //screen
 			gameContainer.setDisplayMode(screenWidth, screenHeight, false); //width, height, fullscreen?
-			gameContainer.setShowFPS(debug);
+			gameContainer.setShowFPS(false);
 			gameContainer.setTargetFrameRate(FPS);
 			gameContainer.start();
 		}

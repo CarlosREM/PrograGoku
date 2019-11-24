@@ -4,7 +4,7 @@ public class GameState {
 	private static GameState instance = null;
 	private ExtendedCharacter character;
 	private int year = 0;
-	private int day = 0;
+	private int day = 1;
 	private static int maxYearDays = 5;
 	
 	private GameState() {
@@ -41,12 +41,8 @@ public class GameState {
 		this.day = day;
 	}
 	
-	public String getDayString() {
-		return "Day " + String.valueOf(getDay());
-	}
-	
-	public String getYearString() {
-		return "Year " + String.valueOf(getYear());
+	public String getDateString() {
+		return "Day " + String.valueOf(getDay()) + ", Year " + String.valueOf(getYear());
 	}
 	
 	public void increaseDay() {

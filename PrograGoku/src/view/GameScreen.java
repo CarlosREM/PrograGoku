@@ -7,6 +7,8 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import main.MainGame;
 import management.ActionSpotManager;
+import management.ClockManager;
+import management.DialogManager;
 import management.FixedActivityCoord;
 import management.MapCollisionManager;
 import management.SoundManager;
@@ -18,17 +20,26 @@ public class GameScreen extends BasicGameState {
 	
 	// DEBUG
 	private String strMouse = "No input",
-			   strCam = "No input",
-			   strPosition = "No input",
-			   strMoving = "No input";
+			   	   strCam = "No input",
+			   	   strPosition = "No input",
+			   	   strMoving = "No input";
 	
-	// PAUSE
-	private static boolean paused = false;
-	public static void setPaused(boolean state) {
-		paused = state;
-		musicVolume = (paused) ? 0.1f : 0.3f ;
-	}
+	// INTERRUPTIONS
+	private boolean paused,
+				    dialogPause;
 	private static Color pausedTint = new Color(0, 0, 0, 175); //r, g, b, alpha
+
+	public boolean getPaused() { return paused; } 
+	public void setPaused(boolean state, boolean isDialog) {
+		clockManager.setPause(state);
+		paused = state;
+		dialogPause = isDialog;
+		setLockPosition(state);
+		character.setIdle(state);
+		musicVolume = (paused) ? 0.1f : 0.3f;
+		SoundManager.setVolume(musicVolume);
+	}
+	
 	
 	// CAMERA & BACKGROUND
 	private BigImage background;
@@ -45,6 +56,10 @@ public class GameScreen extends BasicGameState {
 	
 	private boolean lockPosition = false;
 	public void setLockPosition(boolean state) { lockPosition = state; }
+	
+	// LOGIC
+	private ClockManager clockManager;
+	private Thread clockThread;
 	
 	// MISC
 	private static int musicState = 0;
@@ -66,7 +81,7 @@ public class GameScreen extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) {
-		setPaused(false);
+		setPaused(false, false);
 		setLockPosition(false);
 		musicState = 0;
 		
@@ -82,6 +97,13 @@ public class GameScreen extends BasicGameState {
 		
 		charMoveX = playerCollider.getCenterX();
 		charMoveY = playerCollider.getCenterY();
+		
+		if (clockThread.isAlive()) {
+			clockManager.stop();
+			clockManager = new ClockManager();
+			clockThread = new Thread(clockManager);
+		}
+		clockThread.start();
 	}
 	
 	@Override
@@ -99,7 +121,10 @@ public class GameScreen extends BasicGameState {
 		
 		musicTracks = new String[] {"daytime", "nighttime", "battle"};
 		
-		GameOverlay.init();
+		GameOverlay.init("Happy?", 50, 50, 50, 50, 50, 50, null);
+		
+		clockManager = new ClockManager();
+		clockThread = new Thread(clockManager);
 	}
 
 	@Override
@@ -128,16 +153,20 @@ public class GameScreen extends BasicGameState {
 			g.setColor(pausedTint);
 			g.fillRect(0, 0, MainGame.screenWidth, MainGame.screenHeight);
 			
-			g.setColor(Color.white);
-			g.drawString("PAUSED", MainGame.screenWidth/2 - 27, MainGame.screenHeight/3);
-			g.drawString("[ENTER] - Resume", MainGame.screenWidth/2 - 76, MainGame.screenHeight/3 + 32);
-			g.drawString("[ESC] - Exit", MainGame.screenWidth/2 - 58, MainGame.screenHeight/3 + 64);
+			if (!dialogPause) {
+				g.setColor(Color.white);
+				g.drawString("PAUSED", MainGame.screenWidth/2 - 27, MainGame.screenHeight/3);
+				g.drawString("[ENTER] - Resume", MainGame.screenWidth/2 - 76, MainGame.screenHeight/3 + 32);
+				g.drawString("[ESC] - Exit", MainGame.screenWidth/2 - 58, MainGame.screenHeight/3 + 64);
+			}
 		}
 		
 		// UI OVERLAY 
 		GameOverlay.drawTime(g);
 		GameOverlay.drawPlayerStats(g);
 		
+		// DIALOGS
+		DialogManager.drawDialog(g);
 		
 		// DEBUG INFO
 		if (MainGame.debug) {
@@ -174,8 +203,6 @@ public class GameScreen extends BasicGameState {
 			strPosition = "[CHAR POS] X:" + playerCollider.getCenterX() + " - Y:" + playerCollider.getCenterY();
 			strMoving = "[MOVING TO] X:" + charMoveX + " - Y: " + charMoveY;
 		}
-
-		checkKeyboardInteraction(input, sbg);
 				
 		if (!paused){
 			moveCamera(mouseX, mouseY);
@@ -184,6 +211,10 @@ public class GameScreen extends BasicGameState {
 			checkCharacterCollision();
 			checkCharacterInteraction();
 		}
+		else if (dialogPause)
+			DialogManager.checkDialogInput(input);
+		
+		checkKeyboardInteraction(input, sbg);
 	}
 
 	private void moveCamera(int mouseX, int mouseY) {
@@ -294,18 +325,15 @@ public class GameScreen extends BasicGameState {
 	}
 	
 	private void checkKeyboardInteraction(Input input, StateBasedGame sbg) {
-		if (input.isKeyPressed(Input.KEY_ENTER)) {
-			setLockPosition(!paused);
-			character.setIdle(!paused);
-			setPaused(!paused);
-			SoundManager.setVolume(musicVolume);
+		if (input.isKeyPressed(Input.KEY_ENTER) && !dialogPause) {
+			setPaused(!paused, false);
 		}
 		
-		if (paused && input.isKeyPressed(Input.KEY_ESCAPE)) {
+		if (input.isKeyPressed(Input.KEY_ESCAPE) && paused && !dialogPause) {
 			sbg.enterState(MainGame.menuScreen, new FadeOutTransition(), new FadeInTransition());
 		}
 		
-		if (MainGame.debug && input.isKeyPressed(Input.KEY_M)) {
+		if (input.isKeyPressed(Input.KEY_M) && MainGame.debug) {
 			musicState++;
 			if (musicState == 3)
 				musicState = 0;

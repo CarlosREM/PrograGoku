@@ -18,20 +18,13 @@ public class MenuScreen extends BasicGameState {
 	private final int stateId;
 	
 	private String mouse = "No input";
-	private String clock = "";
-	private ClockManager clockManager;
-	private Thread clockThread;
-	private String day = "";
-	private String year = "";
 	
 	// RESOURCES
 	private BigImage background,
 				  gameTitle;
 	
 	private List<MenuButton> buttons = new ArrayList<>();
-	
-	//private final List<AnimatedButton> buttons = new ArrayList<>();
-	
+		
 	private static final String res = "res/images/menu/";
 	
 	public MenuScreen(int stateId) {
@@ -69,12 +62,7 @@ public class MenuScreen extends BasicGameState {
 				SoundManager.stopMusic();
 				System.exit(0);
 			}
-		});		
-		clockManager = new ClockManager();
-		clockThread = new Thread(clockManager);
-		day = GameState.getInstance().getDayString();
-		year = GameState.getInstance().getYearString();
-		
+		});
 	}
 
 	@Override
@@ -89,9 +77,6 @@ public class MenuScreen extends BasicGameState {
 		if (MainGame.debug) {
 			g.drawString(mouse, 10, 30);
 			g.drawString("Current State: " + getID(), 10, 50);
-			g.drawString(clock, 10, 70);
-			g.drawString(day, 10, 90);
-			g.drawString(year, 10, 110);
 		}
 		
 		//AUDIO
@@ -104,17 +89,15 @@ public class MenuScreen extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if(!clockThread.isAlive())
-			clockThread.start();
-		
-		clock = clockManager.getClockString();
-		day = GameState.getInstance().getDayString();
-		year = GameState.getInstance().getYearString();
-		
 		if (MainGame.debug) {
 			int mouseX = Mouse.getX(),
 				mouseY = MainGame.screenHeight - Mouse.getY();
 			mouse = "[MOUSE] X: " + mouseX + " - Y: " + mouseY;
+		}
+		
+		if (gc.getInput().isKeyPressed(Input.KEY_LSHIFT)) {
+			MainGame.debug = !MainGame.debug;
+			gc.setShowFPS(MainGame.debug);
 		}
 		
 		for (MenuButton button : buttons)
@@ -133,7 +116,7 @@ public class MenuScreen extends BasicGameState {
 				SoundManager.playSound("btnFocus");
 
 			if (button.getState() == MenuButton.STATE_FOCUSED &&
-				input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
+				input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
 			{
 				button.setState(MenuButton.STATE_PRESSED);
 				SoundManager.playSound("btnClick");

@@ -21,6 +21,8 @@ public class DialogManager extends UIManager {
 	private static Dialog currentDialog = null;
 	
 	public static void createDialog(int type, String message) {
+		SoundManager.playSound("dialogPopup");
+
 		List<String> responses = new ArrayList<>();
 		if (type == TYPE_OK) {
 			responses.add("OK");
@@ -36,6 +38,8 @@ public class DialogManager extends UIManager {
 			GameScreen.getInstance().setPaused(true, true);
 	}
 	public static void createDialog(int type, String message, List<String> responses) {
+		SoundManager.playSound("dialogPopup");
+
 		currentDialog = new DialogManager.Dialog(type, message, responses);
 		GameScreen.getInstance().setPaused(true, true);
 	}
@@ -46,6 +50,7 @@ public class DialogManager extends UIManager {
 			Thread.sleep(100);
 		}
 		String response = currentDialog.responseSelected;
+		SoundManager.playSound("dialogSelect");
 		closeDialog();
 		return response;
 	}
@@ -102,7 +107,7 @@ public class DialogManager extends UIManager {
 		String responseSelected = "";
 		
 		int optionMinIndex = 0;
-		int optionListSize = 18;
+		int optionListSize = 16;
 		
 		float width = 0, height = 0;
 		
@@ -131,7 +136,7 @@ public class DialogManager extends UIManager {
 					if (tempWidth > width)
 						width = tempWidth;
 				}
-				height += optionListSize*16 + 3*72; // option list size + available commands
+				height += optionListSize*16 + 3*68; // option list size + available commands
 			}
 			
 			if (type != TYPE_MESSAGE)
@@ -161,8 +166,11 @@ public class DialogManager extends UIManager {
 		}
 		
 		void checkListInput(Input input) {
-			boolean keyPress = false;
+			boolean navigate = false,
+					close = false;
+			
 			if (input.isKeyPressed(Input.KEY_UP)) {
+				navigate = true;
 				if (responseHovered > 0) {
 					responseHovered -= 1;
 					if (responseHovered < optionMinIndex)
@@ -170,6 +178,7 @@ public class DialogManager extends UIManager {
 				}
 			}
 			else if (input.isKeyPressed(Input.KEY_DOWN)) {
+				navigate = true;
 				if (responseHovered < (responses.size()-1)) {
 					responseHovered += 1;
 					if (responseHovered == (optionMinIndex + optionListSize))
@@ -178,28 +187,32 @@ public class DialogManager extends UIManager {
 			}
 			
 			else if (input.isKeyPressed(Input.KEY_ESCAPE)) {
-				keyPress = true;
+				close = true;
 			}
 			else if (input.isKeyPressed(Input.KEY_ENTER)) {
-				keyPress = true;
+				close = true;
 			}
 			
-			if (keyPress)
+			if (navigate)
+				SoundManager.playSound("dialogNavigate");
+			
+			else if (close) {
 				responseSelected = responses.get(responseHovered);
+			}
 		}
 
 		// DRAW DIALOG
 		
 		void drawMessageDialog(Graphics g) {
 			if (height < GameOverlay.getHeight())
-				height += GameOverlay.getHeight();
+				height = GameOverlay.getHeight();
 						
 			float y =  MainGame.screenHeight - height;
 			
 			g.setColor(borderColor);
-			g.fillRoundRect(0, y, width, height, 10);
+			g.fillRoundRect(0, y, width, height + 10, 10);
 			g.setColor(mainColor);
-			g.fillRoundRect(5, y+5, width - 10, height, 10);
+			g.fillRoundRect(5, y+5, width - 10, height + 10, 10);
 			
 			g.setColor(textColor);
 			g.drawString(message, 16, y + 16);

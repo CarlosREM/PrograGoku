@@ -19,19 +19,29 @@ public class SoundManager {
 		currentTrack.setVolume(volume);
 	}
 	
-	public static void playMusic(String trackName) throws SlickException {
-		currentTrackName = trackName;
-		currentTrack = new Music(resPath + "theme_" + trackName + ".ogg");
-		currentTrack.setVolume(volume);
-		currentTrack.loop();
+	public static void playMusic(String trackName) {
+		try {
+			currentTrackName = trackName;
+			currentTrack = new Music(resPath + "theme_" + trackName + ".ogg");
+			currentTrack.setVolume(volume);
+			currentTrack.loop();
+		}
+		catch(SlickException ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	public static void stopMusic() {
 		currentTrack.stop();
 	}
 	
-	public static void playSound(String path) throws SlickException {
-		Sound sfx = new Sound(resPath + "sfx_" + path + ".wav");
-		sfx.play();
+	public static void playSound(String path) {
+		try {
+			Sound sfx = new Sound(resPath + "sfx_" + path + ".wav");
+			sfx.play();
+		}
+		catch(SlickException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

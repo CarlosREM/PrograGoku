@@ -24,5 +24,22 @@ public abstract class AMeal implements IConsumable {
 	public void raisePoop(ExtendedCharacter character) {
 		int cPoop = character.getPoop();
 		character.setPoop(cPoop+this.nutriment);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getNutriment() {
+		return nutriment;
+	}
+
+	public void setNutriment(int nutriment) {
+		this.nutriment = nutriment;
 	}	
+	
 }

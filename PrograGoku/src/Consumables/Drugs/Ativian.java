@@ -5,8 +5,8 @@ import abstraction.ADrug;
 
 public class Ativian extends ADrug{
 
-	public Ativian(String name) {
-		super(name);
+	public Ativian() {
+		super("Ativian");
 		sickness.add(new Obesity());
 	}
 	

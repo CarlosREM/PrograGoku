@@ -7,7 +7,7 @@ import abstraction.ADrug;
 import abstraction.AMeal;
 import abstraction.IConsumable;
 
-public class ConsumableFactory {
+public  class ConsumableFactory {
 	private  HashMap<String, IConsumable> consumables = new HashMap<>();
 	
 	public void addConsumable(String key,IConsumable value){
@@ -24,25 +24,4 @@ public class ConsumableFactory {
 		return consumables.get(consumables.keySet().toArray()[num]);
 	}
 	
-	public AMeal getRandomMeal(){
-		int qKeys = consumables.size();
-		IConsumable consumable = null;
-		int num;
-		while(!(consumable instanceof AMeal)) {
-			num = new Random().nextInt(qKeys);
-			consumable = consumables.get(consumables.keySet().toArray()[num]);
-		}
-		return (AMeal) consumable;
-	}	
-	
-	public ADrug getRandomDrug(){
-		int qKeys = consumables.size();
-		IConsumable consumable = null;
-		int num;
-		while(!(consumable instanceof ADrug)) {
-			num = new Random().nextInt(qKeys);
-			consumable = consumables.get(consumables.keySet().toArray()[num]);
-		}
-		return (ADrug) consumable;
-	}		
 }

@@ -6,8 +6,8 @@ import abstraction.ADrug;
 
 public class Ibuprofen extends ADrug{
 
-	public Ibuprofen(String name) {
-		super(name);
+	public Ibuprofen() {
+		super("Ibuprofen");
 		sickness.add(new Headache());
 		sickness.add(new Arthritis());
 	}

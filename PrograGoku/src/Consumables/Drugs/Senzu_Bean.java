@@ -10,7 +10,7 @@ import abstraction.ADrug;
 
 public class Senzu_Bean extends ADrug{
 
-	public Senzu_Bean(String name) {
+	public Senzu_Bean() {
 		super("Senzu Bean");
 		sickness.add(new Cancer());
 		sickness.add(new Cold());

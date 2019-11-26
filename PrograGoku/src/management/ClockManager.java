@@ -102,7 +102,7 @@ public class ClockManager implements Runnable {
 		if(minutes != 30)
 			return;
 		if(hours == 0 || hours == 6 || hours == 12 || hours == 18)
-			GameState.getInstance().getCharacter().decreaseHunger(5);
+			GameState.getInstance().getCharacter().increaseHunger(5);
 	}
 	
 	private void growGarden() {

@@ -69,6 +69,8 @@ public class ClockManager implements Runnable {
 				checkSicknesses();
 				
 				growGarden();
+				
+				checkHunger();
 						
 				GameOverlay.update(GameState.getInstance().getCharacter());
 			}
@@ -94,6 +96,13 @@ public class ClockManager implements Runnable {
 			askSicknessAsign();
 			//preguntar si esta muerto
 		}
+	}
+	
+	private void checkHunger() {
+		if(minutes != 30)
+			return;
+		if(hours == 0 || hours == 6 || hours == 12 || hours == 18)
+			GameState.getInstance().getCharacter().decreaseHunger(5);
 	}
 	
 	private void growGarden() {

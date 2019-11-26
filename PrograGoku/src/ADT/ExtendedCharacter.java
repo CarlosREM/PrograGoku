@@ -126,51 +126,88 @@ public class ExtendedCharacter extends DefaultCharacter {
 	
 	public void increasePee(int amount) {
 		this.pee += amount;
+		if(pee>100) {
+			this.pee = 100;
+		}
 	}
 	
 	public void decreasePee(int amount) {
 		this.pee -= amount;
+		if(pee<0) {
+			this.pee = 0;
+		}
 	}
 	
 	public void increasePoop(int amount) {
 		this.poop += amount;
+		if(poop>100) {
+			this.poop = 100;
+		}		
 	}
 	
 	public void decreasePoop(int amount) {
 		this.poop -= amount;
+		if(poop<0) {
+			this.poop = 0;
+		}				
 	}
 
 	public void increaseMentalHealth(int amount) {
 		this.mentalHealth += amount;
+		if(mentalHealth>100) {
+			this.mentalHealth = 100;
+		}			
 	}
 	
 	public void decreaseMentalHealth(int amount) {
-		this.mentalHealth -= amount;
+		this.mentalHealth += amount;
+		if(mentalHealth<0) {
+			this.mentalHealth = 0;
+		}		
 	}
 	
 	public void increaseMusculature(int amount) {
 		this.musculature += amount;
+		if(musculature>100) {
+			this.musculature = 100;
+		}			
 	}
 	
 	public void decreaseMusculature(int amount) {
 		this.musculature -= amount;
+		if(musculature<0) {
+			this.musculature = 0;
+		}				
 	}
 	
 	public void increaseFatigue(int amount) {
 		this.fatigue += amount;
+		if(fatigue>100) {
+			this.fatigue = 100;
+		}		
 	}
 	
 	public void decreaseFatigue(int amount) {
 		this.fatigue -= amount;
+		if(fatigue<0) {
+			this.fatigue = 0;
+		}		
 	}
 	
 	public void increaseHunger(int amount) {
 		this.hunger += amount;
+		if(hunger>100) {
+			this.hunger = 100;
+		}
 	}
 	
 	public void decreaseHunger(int amount) {
 		this.hunger -= amount;
+		if(hunger<0) {
+			this.hunger = 0;
+		}			
 	}
+
 	
 	
 }

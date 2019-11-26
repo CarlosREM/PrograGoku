@@ -12,17 +12,19 @@ public abstract class AMeal extends AConsumable {
 	
 	public void raiseHealth(ExtendedCharacter character) {
 		int cHP = character.getCurrentHealthPoints();
-		character.setCurrentHealthPoints(cHP+this.nutriment);
+		if (cHP+this.nutriment<100) {
+			character.setCurrentHealthPoints(cHP+this.nutriment);
+		}else {
+			character.setCurrentHealthPoints(cHP+this.nutriment);	
+		}
 	}
 	
 	public void raisePee(ExtendedCharacter character) {
-		int cPee = character.getPee();
-		character.setPee(cPee+this.nutriment);
+		character.increasePee(nutriment);
 	}
 	
 	public void raisePoop(ExtendedCharacter character) {
-		int cPoop = character.getPoop();
-		character.setPoop(cPoop+this.nutriment);
+		character.increasePoop(nutriment);
 	}
 
 	public int getNutriment() {

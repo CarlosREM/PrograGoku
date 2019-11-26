@@ -15,7 +15,7 @@ public class Proxy {
 	        
             String userHomeFolder = System.getProperty("user.home");
             String fileSeparator = System.getProperty("file.separator");
-            String absoluteFilePath = userHomeFolder+fileSeparator+formatter.format(date)+".json";
+            String absoluteFilePath = userHomeFolder+fileSeparator+formatter.format(date)+".txt";
             PrintWriter writer;
 			try {
 				writer = new PrintWriter(new File(absoluteFilePath));

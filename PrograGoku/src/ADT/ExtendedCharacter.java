@@ -210,7 +210,16 @@ public class ExtendedCharacter extends DefaultCharacter {
 			}
 		}			
 	
-
+	public void increaseHealthPoints(int amount) {
+		super.setCurrentHealthPoints(super.getCurrentHealthPoints() + amount);
+		if(super.getCurrentHealthPoints() > 100)
+			super.setCurrentHealthPoints(100);
+	}
 	
+	public void decreaseHealthPoints(int amount) {
+		super.setCurrentHealthPoints(super.getCurrentHealthPoints() - amount);
+		if(super.getCurrentHealthPoints() < 0)
+			super.setCurrentHealthPoints(0);
+	}
 	
 }

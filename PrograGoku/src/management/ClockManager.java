@@ -68,6 +68,7 @@ public class ClockManager implements Runnable {
 					
 					growGarden();
 					checkHunger();
+					checkFatigue();
 					checkSicknesses();
 					GameState.getInstance().getCharacter().visit(MoodVisitor.getInstance());
 					GameOverlay.update(GameState.getInstance().getCharacter());
@@ -100,8 +101,20 @@ public class ClockManager implements Runnable {
 	private void checkHunger() {
 		if(minutes != 30)
 			return;
-		if(hours == 0 || hours == 6 || hours == 12 || hours == 18)
+		if(hours == 0 || hours == 6 || hours == 12 || hours == 18) {
 			GameState.getInstance().getCharacter().increaseHunger(5);
+			if(GameState.getInstance().getCharacter().getHunger() >= 70)
+				GameState.getInstance().getCharacter().decreaseMentalHealth(5);
+		}
+	}
+	
+	private void checkFatigue() {
+		if(minutes != 0)
+			return;
+		if(hours == 0 || hours == 8 || hours == 16) {
+			GameState.getInstance().getCharacter().increaseFatigue(20);
+			GameState.getInstance().getCharacter().decreaseMentalHealth(10);
+		}
 	}
 	
 	private void growGarden() {
@@ -127,6 +140,4 @@ public class ClockManager implements Runnable {
 			}
 		}
 	}
-	
-	
 }

@@ -13,11 +13,16 @@ public class Headache extends ASickness{
 	@Override
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
-			if(character.getFatigue() >= 50)
-				if(GenerateSicknessChance.applySicknes(character.getFatigue()))
+			if(character.getFatigue() >= 50) {
+				if(GenerateSicknessChance.applySicknes(character.getFatigue())) {
 					character.getSickness().add(this);
-				else
+				}
+				else {
 					return;
+				}
+			}else {
+				return;
+			}
 		}
 		if(character.getFatigue() < 95)
 			character.setFatigue(character.getFatigue() + this.getDamage());

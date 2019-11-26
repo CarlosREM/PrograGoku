@@ -13,11 +13,13 @@ public class Obesity extends ASickness{
 	@Override
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
-			if(character.getMusculature() <= 20)
+			if(character.getMusculature() <= 20) {
 				if(GenerateSicknessChance.applySicknes(100 - character.getMusculature()))
 					character.getSickness().add(this);
 				else
 					return;
+			}else
+				return;
 		}
 		if(character.getFatigue() < 85)
 			character.setFatigue(character.getFatigue() + this.getDamage());

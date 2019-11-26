@@ -14,10 +14,12 @@ public class Cold extends ASickness{
 	@Override
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
-			if(GenerateSicknessChance.applySicknes(20))
+			if(GenerateSicknessChance.applySicknes(20)) {
 				character.getSickness().add(this);
-			else
+			}
+			else {
 				return;
+			}
 		}
 		character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
 	}

@@ -14,9 +14,16 @@ public class Arthritis extends ASickness{
 	@Override
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
-			if(character.getMusculature() <= 40)
-				if(GenerateSicknessChance.applySicknes(100 - character.getMusculature()))
+			if(character.getMusculature() <= 40) {
+				if(GenerateSicknessChance.applySicknes(100 - character.getMusculature())) {
 					character.getSickness().add(this);
+				}
+				else {
+					return;
+				}
+			}else {
+				return;
+			}
 		}
 		if(character.getMusculature() > 10)
 			character.setMusculature(character.getMusculature() - this.getDamage());

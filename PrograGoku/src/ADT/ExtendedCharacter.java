@@ -48,7 +48,6 @@ public class ExtendedCharacter extends DefaultCharacter {
 		return null;
 	}
 
-	
 	public Mood getMood() {
 		return mood;
 	}
@@ -117,14 +116,61 @@ public class ExtendedCharacter extends DefaultCharacter {
 		return immortal;
 	}
 
-
 	public void setImmortal(boolean immortal) {
 		this.immortal = immortal;
 	}
 
-
 	public void visit(IVisitor visitor) {
 		visitor.visit(this);
 	}
+	
+	public void increasePee(int amount) {
+		this.pee += amount;
+	}
+	
+	public void decreasePee(int amount) {
+		this.pee -= amount;
+	}
+	
+	public void increasePoop(int amount) {
+		this.poop += amount;
+	}
+	
+	public void decreasePoop(int amount) {
+		this.poop -= amount;
+	}
 
+	public void increaseMentalHealth(int amount) {
+		this.mentalHealth += amount;
+	}
+	
+	public void decreaseMentalHealth(int amount) {
+		this.mentalHealth -= amount;
+	}
+	
+	public void increaseMusculature(int amount) {
+		this.musculature += amount;
+	}
+	
+	public void decreaseMusculature(int amount) {
+		this.musculature -= amount;
+	}
+	
+	public void increaseFatigue(int amount) {
+		this.fatigue += amount;
+	}
+	
+	public void decreaseFatigue(int amount) {
+		this.fatigue -= amount;
+	}
+	
+	public void increaseHunger(int amount) {
+		this.hunger += amount;
+	}
+	
+	public void decreaseHunger(int amount) {
+		this.hunger -= amount;
+	}
+	
+	
 }

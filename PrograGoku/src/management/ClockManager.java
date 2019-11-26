@@ -58,19 +58,26 @@ public class ClockManager implements Runnable {
 						GameOverlay.setTime(getClockString());
 						if (hours == 6) {
 							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_DAY);
+							//askSicknessAsign();
 							askSicknessAsign();
 							//preguntar si esta muerto
 						}
 						else if (hours == 18) {
 							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_NIGHT);
+							//askSicknessAsign();
+							//preguntar si esta muerto
+						}
+						/*
+						if(minutes == 0||minutes == 30)
+						{
+							GameState.getInstance().getCharacter().setHunger();
+						}*/
 							askSicknessAsign();
 							//preguntar si esta muerto
 						}
 						//demas acciones
 						growGarden();
-				}
-			}
-			catch (InterruptedException e) {
+			}catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
@@ -99,5 +106,6 @@ public class ClockManager implements Runnable {
 			}
 		}
 	}
+	
 	
 }

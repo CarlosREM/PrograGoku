@@ -14,11 +14,16 @@ public class Depression extends ASickness{
 	@Override
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
-			if(character.getMentalHealth() <= 30)
-				if(GenerateSicknessChance.applySicknes(100 - character.getMentalHealth()))
+			if(character.getMentalHealth() <= 30) {
+				if(GenerateSicknessChance.applySicknes(100 - character.getMentalHealth())) {
 					character.getSickness().add(this);
-				else
+				}
+				else {
 					return;
+				}
+			}
+		}else {
+			return;
 		}
 		if(character.getFatigue() < 95) 
 			character.setFatigue(character.getFatigue() + this.getDamage());

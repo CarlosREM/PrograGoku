@@ -14,13 +14,17 @@ public class Cancer extends ASickness{
 	@Override
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
-			if(character.getLevel() >= 15)
-				if(GenerateSicknessChance.applySicknes(character.getLevel()))
+			if(character.getLevel() >= 15) {
+				if(GenerateSicknessChance.applySicknes(character.getLevel())) {
 					character.getSickness().add(this);
-				else
+				}else {
 					return;
+				}
+			}
+			else {
+				return;
+			}
 		}
 		character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
 	}
-
 }

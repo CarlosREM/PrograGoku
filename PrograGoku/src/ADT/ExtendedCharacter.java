@@ -1,6 +1,7 @@
 package ADT;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import abstraction.ACharacter;
 import abstraction.ASickness;
@@ -21,7 +22,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 	private int hunger;
 	
 	public ExtendedCharacter(String name) {		
-		super(name, null, 100, 100, 0, 1, 0, 0, 0, new ArrayList<>() , 0, 0);
+		super(name, new TreeMap<>(), 100, 100, 0, 1, 0, 0, 0, new ArrayList<>() , 0, 0);
 		this.mood = Mood.HAPPY;
 		this.pee = 0;
 		this.poop = 0;

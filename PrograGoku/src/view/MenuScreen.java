@@ -9,6 +9,7 @@ import org.newdawn.slick.state.*;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import ADT.ExtendedCharacter;
 import ADT.GameState;
 import main.MainGame;
 import management.ClockManager;
@@ -43,6 +44,7 @@ public class MenuScreen extends BasicGameState {
 								  res + "Menu_StartPressed.png") {
 			@Override
 			public void performAction() {
+				GameState.getInstance().setCharacter(new ExtendedCharacter("Phillip"));
 				sbg.enterState(MainGame.gameScreen, new FadeOutTransition(), new FadeInTransition());
 			}
 		});

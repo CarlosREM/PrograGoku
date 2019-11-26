@@ -51,38 +51,51 @@ public class ClockManager implements Runnable {
 			try {
 				Thread.sleep(clockUpdateLapse);
 				if (!paused) {
-						if(increaseTime()) {
-							GameState.getInstance().increaseDay();
-							GameOverlay.setDate(GameState.getInstance().getDateString());
-						}
-						GameOverlay.setTime(getClockString());
-						if (hours == 6) {
-							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_DAY);
-							//askSicknessAsign();
-							askSicknessAsign();
-							//preguntar si esta muerto
-						}
-						else if (hours == 18) {
-							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_NIGHT);
-							//askSicknessAsign();
-							//preguntar si esta muerto
-						}
-						/*
-						if(minutes == 0||minutes == 30)
-						{
-							GameState.getInstance().getCharacter().setHunger();
-						}*/
-							askSicknessAsign();
-							//preguntar si esta muerto
-						}
-						//demas acciones
-						growGarden();
-			}catch (InterruptedException e) {
+					if(increaseTime()) {
+						GameState.getInstance().increaseDay();
+						GameOverlay.setDate(GameState.getInstance().getDateString());
+					}
+					GameOverlay.setTime(getClockString());
+					
+					if(minutes == 0||minutes == 30)
+					{
+						//GameState.getInstance().getCharacter().setHunger();
+					}
+					//preguntar si esta muerto
+				}
+				//demas acciones
+				setMusic();
+				
+				checkSicknesses();
+				
+				growGarden();
+						
+				GameOverlay.update(GameState.getInstance().getCharacter());
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
+	
+	private void setMusic() {
+		if (minutes != 0) return;
 		
+		if (hours == 6)
+			GameScreen.getInstance().setMusicState(GameScreen.MUSIC_DAY);
+		else if (hours == 18)
+			GameScreen.getInstance().setMusicState(GameScreen.MUSIC_NIGHT);
+	}
+	
+	private void checkSicknesses() {
+		if (minutes != 0) return;
+		
+		if (hours == 6 || hours == 18) {
+			askSicknessAsign();
+			//preguntar si esta muerto
+		}
+	}
+	
 	private void growGarden() {
 		switch(hours) { 
 		case 6: case 16:

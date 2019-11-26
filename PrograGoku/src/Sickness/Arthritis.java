@@ -15,7 +15,7 @@ public class Arthritis extends ASickness{
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
 			if(character.getMusculature() <= 40) {
-				if(GenerateSicknessChance.applySicknes(100 - character.getMusculature())) {
+				if(GenerateSicknessChance.applySickness(100 - character.getMusculature())) {
 					character.getSickness().add(this);
 				}
 				else {
@@ -25,7 +25,9 @@ public class Arthritis extends ASickness{
 				return;
 			}
 		}
-		if(character.getMusculature() > 10)
-			character.setMusculature(character.getMusculature() - this.getDamage());
+		else {
+			if(character.getMusculature() >= 10)
+				character.setMusculature(character.getMusculature() - this.getDamage());
+		}
 	}
 }

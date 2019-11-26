@@ -14,7 +14,7 @@ public class Headache extends ASickness{
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
 			if(character.getFatigue() >= 50) {
-				if(GenerateSicknessChance.applySicknes(character.getFatigue())) {
+				if(GenerateSicknessChance.applySickness(character.getFatigue())) {
 					character.getSickness().add(this);
 				}
 				else {
@@ -24,10 +24,11 @@ public class Headache extends ASickness{
 				return;
 			}
 		}
-		if(character.getFatigue() < 95)
-			character.setFatigue(character.getFatigue() + this.getDamage());
-		character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
-		
+		else {
+			if(character.getFatigue() < 95)
+				character.setFatigue(character.getFatigue() + this.getDamage());
+			character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
+		}
 	}
 
 }

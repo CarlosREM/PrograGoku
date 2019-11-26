@@ -129,9 +129,7 @@ public class GameScreen extends BasicGameState {
 		GardenManager.init();
 		
 		musicTracks = new String[] {"nighttime", "daytime", "battle"};
-		
-		GameOverlay.init("Happy", 50, 50, 50, 50, 50, 50, null);
-		
+				
 		clockManager = new ClockManager();
 		clockThread = new Thread(clockManager);
 	}

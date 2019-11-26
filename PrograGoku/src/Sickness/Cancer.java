@@ -15,7 +15,7 @@ public class Cancer extends ASickness{
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
 			if(character.getLevel() >= 15) {
-				if(GenerateSicknessChance.applySicknes(character.getLevel())) {
+				if(GenerateSicknessChance.applySickness(character.getLevel())) {
 					character.getSickness().add(this);
 				}else {
 					return;
@@ -25,6 +25,7 @@ public class Cancer extends ASickness{
 				return;
 			}
 		}
-		character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
+		else
+			character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
 	}
 }

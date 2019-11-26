@@ -1,8 +1,9 @@
 package ADT;
 
 public enum Mood {
-	HAPPY,
-	SAD, 
-	SICK,
-	DELICIOSO
+	Happy,
+	Sad,
+	Sleeping,
+	Sick,
+	Delicioso;
 }

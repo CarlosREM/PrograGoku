@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 
+import ADT.ExtendedCharacter;
 import abstraction.ASickness;
 import main.MainGame;
 import management.UIManager;
@@ -23,47 +23,33 @@ public class GameOverlay extends UIManager {
 	//STATS - - -
 	private static String time = "23:00", date = "Day 31, Year 10";
 
-	private static String statMood = "Happy";
-	private static int statEnergy = 50,
-					   statSleep = 50,
-					   statToilet = 50,
-					   statHunger = 50,
-					   statMental = 50,
-					   statFitness = 50;
+	private static String statMood = "Sleeping";
+	private static float statEnergy = 50,
+					   	 statSleep = 50,
+					   	 statToilet = 50,
+					   	 statHunger = 50,
+					   	 statMental = 50,
+					   	 statMusculature = 50;
 	
-	private static List<String> sicknesses;
+	private static List<String> sicknesses = new ArrayList<>();
 	
 	public static void setTime(String time) { GameOverlay.time = time; }
-
 	public static void setDate(String date) { GameOverlay.date = date; }
 
-	public static void setStatMood(String statMood) {	GameOverlay.statMood = statMood; }
+	public static void update(ExtendedCharacter character) {
+		
+		statMood = character.getMood().name();
+		statEnergy = character.getCurrentHealthPoints();
+		statSleep = 100 - character.getFatigue();
+		statMental = character.getMentalHealth();
+		statHunger = character.getHunger();
+		statToilet = (character.getPee()/2) + (character.getPoop()/2);
+		statMusculature = character.getMusculature();
+		
+		sicknesses.clear();
+		for (ASickness sickness : character.getSickness())
+			sicknesses.add(sickness.getName());
 
-	public static void setStatEnergy(int statEnergy) { GameOverlay.statEnergy = statEnergy; }
-
-	public static void setStatSleep(int statSleep) { GameOverlay.statSleep = statSleep; }
-
-	public static void setStatToilet(int statToilet) { GameOverlay.statToilet = statToilet;	}
-
-	public static void setStatHunger(int statHunger) {	GameOverlay.statHunger = statHunger; }
-
-	public static void setStatMental(int statMental) { GameOverlay.statMental = statMental;	}
-
-	public static void setStatFitness(int statFitness) { GameOverlay.statFitness = statFitness;	}
-
-	public static void setSicknesses(List<String> sicknesses) {	GameOverlay.sicknesses = sicknesses; }
-
-	public static void init(String statMood, int statEnergy, int statSleep,
-							int statToilet, int statHunger, int statMental,
-							int statFitness, List<ASickness> sicknesses) throws SlickException {
-		GameOverlay.statMood = statMood;
-		GameOverlay.statEnergy = statEnergy;
-		GameOverlay.statSleep = statSleep;
-		GameOverlay.statToilet = statToilet;
-		GameOverlay.statHunger = statHunger;
-		GameOverlay.statMental = statMental;
-		GameOverlay.statFitness = statFitness;
-		GameOverlay.sicknesses = new ArrayList<>();
 	}
 	
 	public static void drawTime(Graphics g) {
@@ -105,8 +91,6 @@ public class GameOverlay extends UIManager {
 		g.setColor(textColor);
 		g.drawString("MOOD: " + statMood, offsetX, offsetY + height - borderWidth*5 - 8);
 		
-		
-		
 		// div
 		g.setColor(borderColor);
 		offsetX += height + 32;
@@ -117,9 +101,9 @@ public class GameOverlay extends UIManager {
 		g.setColor(textColor);
 		g.drawString("Energy:", offsetX, offsetY);
 		g.drawString("Sleep:", offsetX, offsetY + 44);
-		g.drawString("Toilet:", offsetX, offsetY + 44 + 32);
+		g.drawString("Mental:", offsetX, offsetY + 44 + 32);
 		g.drawString("Hunger:", offsetX + 76 + 150 + 16, offsetY + 44);
-		g.drawString("Mental:", offsetX + 76 + 150 + 16, offsetY + 44 + 32);
+		g.drawString("Toilet:", offsetX + 76 + 150 + 16, offsetY + 44 + 32);
 		
 		// STAT BARS
 		g.setColor(transpBlackColor);
@@ -130,17 +114,31 @@ public class GameOverlay extends UIManager {
 		g.fillRoundRect(offsetX + 76 + 150 + 16 + 76, offsetY + 44 + 32, 150, 20, 5);
 		
 		g.setColor(barColor);
-		g.fillRoundRect(offsetX + 76 + 2, offsetY + 2,
-					   (392f*((float) statEnergy/100)) - 4, 20 - 4, 5);
-		g.fillRoundRect(offsetX + 76 + 2, offsetY + 44 + 2,
-					   (150f*((float) statSleep/100)) - 4, 20 - 4, 5);
-		g.fillRoundRect(offsetX + 76 + 2, offsetY + 44 + 32 + 2,
-					   (150f*((float) statToilet/100)) - 4, 20 - 4, 5);
-		g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44+ 2,
-					   (150f*((float) statHunger/100)) - 4, 20 - 4, 5);
-		g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2,
-					   (150f*((float) statMental/100)) - 4, 20 - 4, 5);
+		if (statEnergy >= 0)
+			g.fillRoundRect(offsetX + 76 + 2, offsetY + 2,
+						   (392f*((float) statEnergy/100)) - 4, 20 - 4, 5);
+		if (statSleep >= 0)
+			g.fillRoundRect(offsetX + 76 + 2, offsetY + 44 + 2,
+						   (150f*((float) statSleep/100)) - 4, 20 - 4, 5);
+		if (statMental >= 0)
+			g.fillRoundRect(offsetX + 76 + 2, offsetY + 44 + 32 + 2,
+						   (150f*((float) statMental/100)) - 4, 20 - 4, 5);
+		if (statHunger >= 0)
+			g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44+ 2,
+						   (150f*((float) statHunger/100)) - 4, 20 - 4, 5);
+		if (statToilet >= 0)
+			g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2,
+						   (150f*((float) statToilet/100)) - 4, 20 - 4, 5);
 		
+		//debug info
+		if (MainGame.debug) {
+			g.setColor(Color.white);
+			g.drawString(""+statEnergy, offsetX + 76 + 2, offsetY + 2);
+			g.drawString(""+statSleep,offsetX + 76 + 2, offsetY + 44 + 2);
+			g.drawString(""+statMental,offsetX + 76 + 2, offsetY + 44 + 32 + 2);
+			g.drawString(""+statHunger, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44+ 2);
+			g.drawString(""+statToilet, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2);
+		}
 		
 		// div
 		g.setColor(borderColor);
@@ -150,7 +148,7 @@ public class GameOverlay extends UIManager {
 		
 		// SICKNESSES
 		g.setColor(textColor);
-		g.drawString("Sicknesses: ", offsetX, offsetY);
+		g.drawString("SICKNESSES: ", offsetX, offsetY);
 		if (sicknesses.isEmpty())
 			g.drawString("> None :D", offsetX + 16, offsetY + 24);
 		else {
@@ -171,7 +169,7 @@ public class GameOverlay extends UIManager {
 		
 		// FITNESS
 		g.setColor(textColor);
-		g.drawString("Fitness:", offsetX, offsetY);
+		g.drawString("MUSCULATURE:", offsetX, offsetY);
 		
 		g.setColor(transpBlackColor);
 		g.fillRoundRect(offsetX, offsetY + 32, 180, 40, 5);
@@ -183,33 +181,42 @@ public class GameOverlay extends UIManager {
 		g.fillRect(offsetX + 5 + 60, offsetY + 32 + 5, 55, 40 - 10);
 		
 		g.setColor(Color.white);
-		g.fillRect(offsetX + 172f*((float) statFitness/100), offsetY + 32, 8, 40);
+		g.fillRect(offsetX + 172f*((float) statMusculature/100), offsetY + 32, 8, 40);
 		
 		g.setColor(textColor);
 		g.drawString("Fat", offsetX, offsetY + 32 + 40);
 		g.drawString("Fit", offsetX + 150, offsetY + 32 + 40);
 		
 		g.setColor(Color.white);
+		
 	}
 
 	private static void drawMoodPortrait(Graphics g, float offsetX, float offsetY) {
+		Color currentColor;
 		switch(statMood) {
 			case "Happy":
-				g.setColor(greenColor);
+				currentColor = greenColor;
 				break;
 				
 			case "Sad":
-				g.setColor(blueColor);
+				currentColor = blueColor;
 				break;
 				
+			case "Sick":
+				currentColor = greenColor;
+				
 			case "Delicioso":
-				g.setColor(redColor.brighter(5f));
+				currentColor = redColor.brighter(5f);
+				break;
+				
+			case "Sleeping":
+				currentColor = Color.white;
 				break;
 				
 			default:
-				g.setColor(yellowColor);
+				currentColor = yellowColor;
 		}
-		
+		g.setColor(currentColor);
 		g.fillRoundRect(offsetX, offsetY, height, height - borderWidth*6, 5);
 		
 		g.setColor(transpBlackColor);
@@ -218,22 +225,32 @@ public class GameOverlay extends UIManager {
 		
 		g.fillRect(offsetX + 32, offsetY + 56, 96, 32); // MOUTH
 
-		if (statMood.equals("Happy")) {
-			g.setColor(greenColor);
-			g.fillRect(offsetX + 48, offsetY + 56, 64, 16);
-		}
-		else if (statMood.equals("Delicioso")) {
-			g.setColor(redColor);
-			g.fillRect(offsetX + 32, offsetY + 44, 16, 8); // LEFT EYE
-			g.fillRect(offsetX + 112, offsetY + 44, 16, 8);// RIGHT EYE
-		}
-		else if (statMood.equals("Sad")) {
-			g.setColor(blueColor);
-			g.fillRect(offsetX + 48, offsetY + 72, 64, 16);
-		}
-		else {
-			g.setColor(yellowColor);
-			g.fillRect(offsetX + 32, offsetY + 56, 96, 16);
+		g.setColor(currentColor);
+		switch(statMood) {
+			case "Happy":
+				g.fillRect(offsetX + 48, offsetY + 56, 64, 16);
+				break;
+				
+			case "Delicioso":
+				g.setColor(redColor);
+				g.fillRect(offsetX + 32, offsetY + 44, 16, 8); // LEFT BLUSH
+				g.fillRect(offsetX + 112, offsetY + 44, 16, 8);// RIGHT BLUSH
+				break;
+				
+			case "Sad": case "Sick":
+				g.fillRect(offsetX + 48, offsetY + 72, 64, 16);
+				break;
+				
+			case "Sleeping":
+				g.fillRect(offsetX + 32, offsetY + 80, 88, 8);
+				
+				g.setColor(transpBlackColor);
+				g.fillRect(offsetX + 48, offsetY + 24, 16, 16);
+				g.fillRect(offsetX + 96, offsetY + 24, 16, 16);
+				break;
+			
+			default:
+				g.fillRect(offsetX + 32, offsetY + 56, 96, 16);
 		}
 	}
 	

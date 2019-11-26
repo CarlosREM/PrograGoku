@@ -23,7 +23,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 	
 	public ExtendedCharacter(String name) {		
 		super(name, new TreeMap<>(), 100, 100, 0, 1, 0, 0, 0, new ArrayList<>() , 0, 0);
-		this.mood = Mood.HAPPY;
+		this.mood = Mood.Happy;
 		this.pee = 0;
 		this.poop = 0;
 		this.isHurt = false;

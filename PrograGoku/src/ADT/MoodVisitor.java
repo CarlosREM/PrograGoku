@@ -16,18 +16,18 @@ public class MoodVisitor implements IVisitor{
 	@Override
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().isEmpty()) {
-			character.setMood(Mood.SICK);
+			character.setMood(Mood.Sick);
 			return;
 		}
 		if(character.getMentalHealth() <= 40 || character.getHunger() >= 60) {
-			character.setMood(Mood.SAD);
+			character.setMood(Mood.Sad);
 			return;
 		}
 		if(character.getMentalHealth() == 69 || character.getCurrentHealthPoints() == 69) {
-			character.setMood(Mood.DELICIOSO);
+			character.setMood(Mood.Delicioso);
 			return;
 		}
-		character.setMood(Mood.HAPPY);
+		character.setMood(Mood.Happy);
 	}
 
 }

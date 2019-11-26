@@ -14,17 +14,18 @@ public class Obesity extends ASickness{
 	public void visit(ExtendedCharacter character) {
 		if(!character.getSickness().contains(this)) {
 			if(character.getMusculature() <= 20) {
-				if(GenerateSicknessChance.applySicknes(100 - character.getMusculature()))
+				if(GenerateSicknessChance.applySickness(100 - character.getMusculature()))
 					character.getSickness().add(this);
 				else
 					return;
 			}else
 				return;
 		}
-		if(character.getFatigue() < 85)
-			character.setFatigue(character.getFatigue() + this.getDamage());
-		character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
-		
+		else {
+			if(character.getFatigue() < 85) {
+				character.setFatigue(character.getFatigue() + this.getDamage());
+				character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
+			}
+		}
 	}
-
 }

@@ -1,12 +1,13 @@
 package ADT;
 
 public class Loader {
-	  private jarLoader.Loader jloader;
-      public Loader () {
+	  private static jarLoader.Loader jloader;
+      
+	  public static void load() {
     	   jloader = new jarLoader.Loader();
       }
-      public Garden getGarden() {
+	  
+      public static GardenFactory getGarden() {
     	  return jloader.garden;
       }
-  
 }

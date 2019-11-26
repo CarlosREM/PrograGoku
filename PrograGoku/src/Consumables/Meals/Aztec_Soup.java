@@ -6,7 +6,7 @@ import abstraction.AMeal;
 public class Aztec_Soup extends AMeal{
 	
 	public Aztec_Soup() {
-		super("Pizza",10);
+		super("Aztec Soup",10);
 	}
 
 	@Override

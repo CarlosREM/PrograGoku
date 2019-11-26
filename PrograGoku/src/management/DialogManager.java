@@ -102,7 +102,7 @@ public class DialogManager extends UIManager {
 		int type;
 		String message;
 		List<String> responses;
-		int responseHovered = 0;
+		int responseHovered = -1;
 		String responseSelected = "";
 		
 		int optionMinIndex = 0;
@@ -121,10 +121,10 @@ public class DialogManager extends UIManager {
 		private void calculateMsgDims() {
 			String[] lines = message.split("\n");
 			
-			height = 26 + lines.length*16 + 8; //upper offset + number of lines * 16 + lower offset
+			height = 26 + lines.length*18 + 8; //upper offset + number of lines * 16 + lower offset
 			switch(type) {
 				case TYPE_LIST:
-					height += optionListSize*16 + 5*32; // option list size + available commands
+					height += optionListSize*18 + 3*64; // option list size + available commands
 					break;
 				case TYPE_OK: case TYPE_YES_NO:
 					height += 32;
@@ -150,7 +150,7 @@ public class DialogManager extends UIManager {
 		
 		void checkOkInput(Input input) {
 			if (input.isKeyPressed(Input.KEY_ENTER)) {
-				responseSelected = responses.get(responseHovered);
+				responseSelected = "OK";
 				SoundManager.playSound("dialogSelect");
 			}
 		}
@@ -172,31 +172,25 @@ public class DialogManager extends UIManager {
 				responseSelected = responses.get(responseHovered);
 		}
 		
-		void checkListInput(Input input) {
-			boolean close = false;
-			
-			if (input.isKeyPressed(Input.KEY_UP)) {
-				if (responseHovered > 0) {
-					SoundManager.playSound("dialogNavigate");
-					responseHovered -= 1;
-					if (responseHovered < optionMinIndex)
-						optionMinIndex -= 1;
-				}
+		void checkListInput(Input input) {			
+			if (input.isKeyPressed(Input.KEY_UP) &&  responseHovered > 0) {
+				SoundManager.playSound("dialogNavigate");
+				responseHovered -= 1;
+				if (responseHovered < optionMinIndex)
+					optionMinIndex -= 1;
 			}
-			else if (input.isKeyPressed(Input.KEY_DOWN)) {
-				if (responseHovered < (responses.size()-1)) {
-					SoundManager.playSound("dialogNavigate");
-					responseHovered += 1;
-					if (responseHovered == (optionMinIndex + optionListSize))
-						optionMinIndex += 1;
-				}
+			else if (input.isKeyPressed(Input.KEY_DOWN) && responseHovered < (responses.size()-1)) {
+				SoundManager.playSound("dialogNavigate");
+				responseHovered += 1;
+				if (responseHovered == (optionMinIndex + optionListSize))
+					optionMinIndex += 1;
 			}
 			
 			else if (input.isKeyPressed(Input.KEY_ESCAPE)) {
 				SoundManager.playSound("dialogDismiss");
 				responseSelected = "Cancel";
 			}
-			else if (input.isKeyPressed(Input.KEY_ENTER)) {
+			else if (input.isKeyPressed(Input.KEY_ENTER) && responseHovered >= 0) {
 				SoundManager.playSound("dialogSelect");
 				responseSelected = responses.get(responseHovered);
 			}
@@ -275,9 +269,10 @@ public class DialogManager extends UIManager {
 			}
 			
 			// OPTION HOVERED
-			g.setColor(barColor.multiply(transparentMultiplierColor));
-			g.fillRoundRect(16, y + 24*(responseHovered - optionMinIndex) - 2, width - 32, 20, 5);
-			
+			if (responseHovered >= 0) {
+				g.setColor(barColor.multiply(transparentMultiplierColor));
+				g.fillRoundRect(16, y + 24*(responseHovered - optionMinIndex) - 2, width - 32, 20, 5);
+			}
 			//div
 			g.setColor(borderColor);
 			g.fillRect(5, y += (24*optionListSize + 8), width - 10, 2);

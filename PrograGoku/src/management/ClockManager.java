@@ -60,12 +60,29 @@ public class ClockManager implements Runnable {
 							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_NIGHT);
 						
 						//demas acciones
-	
+						growGarden();
 				}
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	
+	private void growGarden() {
+		switch(hours) { 
+		case 6: case 16:
+			GardenManager.loadGardenSpot(0);
+			break;
+			
+		case 8: case 18:
+			GardenManager.loadGardenSpot(1);
+			break;
+			
+		case 10: case 20:
+			GardenManager.loadGardenSpot(2);
+			break;
 		}
 	}
 	

@@ -10,6 +10,7 @@ import management.ActionSpotManager;
 import management.ClockManager;
 import management.DialogManager;
 import management.FixedActivityCoord;
+import management.GardenManager;
 import management.MapCollisionManager;
 import management.CharacterViewManager;
 import management.SoundManager;
@@ -125,6 +126,7 @@ public class GameScreen extends BasicGameState {
 		playerViewManager = CharacterViewManager.getInstance();
 		MapCollisionManager.init();
 		ActionSpotManager.init();
+		GardenManager.init();
 		
 		musicTracks = new String[] {"nighttime", "daytime", "battle"};
 		
@@ -146,11 +148,18 @@ public class GameScreen extends BasicGameState {
 		// ACTION SPOTS
 		ActionSpotManager.draw(g, camX, camY);
 
+		// GARDEN MANAGER
+		GardenManager.draw(g);
+		
+		// MOVE POSITION
 		if (!playerViewManager.isCharacterIdle() && !playerViewManager.isPlayingAnimation()) {
 			g.setColor(Color.red);
 			g.fillOval(playerViewManager.getMoveX() - 8, playerViewManager.getMoveY() - 4, 16, 8);
 		}
 		
+
+		
+		// CHARACTER
 		playerViewManager.drawCharacter(g);
 
 		// PAUSED

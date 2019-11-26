@@ -34,6 +34,10 @@ public class MainGame extends StateBasedGame {
 		this.enterState(menuScreen);
 	}
 		
+	private static void initResources() {
+		ADT.Loader.load();
+	}
+	
 	public static void startup() {
 		try {
 			gameContainer = new AppGameContainer(new MainGame(gameName)); //screen
@@ -50,6 +54,7 @@ public class MainGame extends StateBasedGame {
 	// - - - -
 	
 	public static void main(String[] args) {
+		MainGame.initResources();
 		MainGame.startup();
 	}
 	

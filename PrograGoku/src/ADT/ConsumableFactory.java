@@ -5,20 +5,20 @@ import java.util.Random;
 
 import abstraction.ADrug;
 import abstraction.AMeal;
-import abstraction.IConsumable;
+import abstraction.AConsumable;
 
 public  class ConsumableFactory {
-	private  HashMap<String, IConsumable> consumables = new HashMap<>();
+	private  HashMap<String, AConsumable> consumables = new HashMap<>();
 	
-	public void addConsumable(String key,IConsumable value){
+	public void addConsumable(String key,AConsumable value){
 	    consumables.put(key, value);
 	}
 	
-	public IConsumable getConsumable(String key) {
+	public AConsumable getConsumable(String key) {
 		return consumables.get(key);
 	}
 	
-	public IConsumable getRandomConsumable(){
+	public AConsumable getRandomConsumable(){
 		int qKeys = consumables.size();
 		int num = new Random().nextInt(qKeys);
 		return consumables.get(consumables.keySet().toArray()[num]);

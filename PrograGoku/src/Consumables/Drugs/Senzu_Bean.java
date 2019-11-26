@@ -18,7 +18,6 @@ public class Senzu_Bean extends ADrug{
 		sickness.add(new Depression());
 		sickness.add(new Arthritis());
 		sickness.add(new Headache());
-		// TODO Auto-generated constructor stub
 	}
 
 }

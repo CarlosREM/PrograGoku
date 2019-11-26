@@ -1,12 +1,12 @@
 package ADT;
 
-public class Garden {
+public class GardenFactory {
    private ConsumableFactory drugsFactory;
    private ConsumableFactory mealsFactory;
    
-   public Garden(ConsumableFactory drugs,ConsumableFactory meals) {
-	   this.drugsFactory = drugs;
-	   this.mealsFactory = meals;
+   public GardenFactory(ConsumableFactory drugsFactory, ConsumableFactory mealsFactory) {
+	   this.drugsFactory = drugsFactory;
+	   this.mealsFactory = mealsFactory;
    }
 
 	public ConsumableFactory getDrugsFactory() {
@@ -24,5 +24,4 @@ public class Garden {
 	public void setMealsFactory(ConsumableFactory mealsFactory) {
 		this.mealsFactory = mealsFactory;
 	}
-   
 }

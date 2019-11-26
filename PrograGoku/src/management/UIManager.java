@@ -12,7 +12,7 @@ public abstract class UIManager {
 			   					 greenColor = new Color(6, 194, 69),
 			   					 yellowColor = new Color(243, 234, 44),
 			   					 redColor = new Color(232, 8, 24),
-			   					 blueColor = new Color(128, 128, 248, 223),
+			   					 blueColor = new Color(128, 128, 248),
 			   					 transparentMultiplierColor = new Color(1, 1, 1, 0.5f);
 	
 }

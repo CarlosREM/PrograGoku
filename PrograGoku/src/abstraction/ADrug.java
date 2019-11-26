@@ -4,22 +4,13 @@ import java.util.ArrayList;
 import ADT.ExtendedCharacter;
 import abstraction.*;
 
-public abstract class ADrug implements IConsumable{
+public abstract class ADrug extends AConsumable{
 	
-	protected String name;
 	protected ArrayList<ASickness> sickness;	
 	
 	public ADrug(String name) {
-		this.name = name;
+		super(name);
 		this.sickness = new ArrayList<>();
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public ArrayList<ASickness> getSickness() {

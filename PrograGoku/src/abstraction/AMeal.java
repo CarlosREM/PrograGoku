@@ -2,12 +2,11 @@ package abstraction;
 
 import ADT.ExtendedCharacter;
 
-public abstract class AMeal implements IConsumable {
-	protected String name;
+public abstract class AMeal extends AConsumable {
 	protected int nutriment;
 	
-	public AMeal(String name,int nutriment) {
-			this.name=name;
+	public AMeal(String name, int nutriment) {
+			super(name);
 			this.nutriment=nutriment;		
 	}
 	
@@ -24,14 +23,6 @@ public abstract class AMeal implements IConsumable {
 	public void raisePoop(ExtendedCharacter character) {
 		int cPoop = character.getPoop();
 		character.setPoop(cPoop+this.nutriment);
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public int getNutriment() {

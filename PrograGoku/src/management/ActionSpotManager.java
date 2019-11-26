@@ -7,6 +7,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import ADT.Fridge;
+import ADT.GameState;
+import abstraction.AConsumable;
 import main.MainGame;
 import view.ColliderRect;
 
@@ -155,8 +158,9 @@ public class ActionSpotManager extends UIManager {
 				String msg = "During the day, your Sleep bar will go down."
 						 + "\nUse the bed to replenish it."
 						 + "\nDoing exercises will use your Sleep bar aswell"
-						 + "\nMake sure to sleep often, otherwise you may get sick!"
-					  + "\n-\nPS: The game saves every day at 00:00. You'll spawn next to your bed when you load.";
+					   + "\n\nMake sure to sleep often, otherwise you may get sick!."
+					  + "\n-\nPS: The game saves every day at 00:00."
+					  +	   "\nYou'll spawn next to your bed when you load.";
 				DialogManager.createDialog(DialogManager.TYPE_OK, msg);
 				Thread dialogThread = new Thread() {
 					@Override
@@ -237,8 +241,12 @@ public class ActionSpotManager extends UIManager {
 			@Override
 			public void action() {
 				ArrayList<String> options = new ArrayList<>();
-				for (int i = 0; i < 24; i++)
-					options.add("Option "+i);
+				int quantity;
+				for (String key : Fridge.getKeys()) {
+					quantity = Fridge.getConsumableQuantity(key);
+					if (quantity > 0)
+						options.add(key + "-("+ quantity + ")");
+				}
 				
 				DialogManager.createDialog(DialogManager.TYPE_LIST, "Select a consumable:", options);
 				Thread dialogThread = new Thread() {
@@ -247,12 +255,15 @@ public class ActionSpotManager extends UIManager {
 						try {
 							String response = DialogManager.getDialogResponse();
 							if (!response.equals("Cancel")) {
-								CharacterViewManager.getInstance().setCharPosition(FixedActivityCoord.TABLE1);
-								CharacterViewManager.getInstance().setCharacterLookingDirection(CharacterViewManager.LOOK_RIGHT);
-								Thread.sleep(3000);
-								CharacterViewManager.getInstance().setCharPosition(FixedActivityCoord.TABLE1.x - 48,
-																				FixedActivityCoord.TABLE1.y);
-							}						}
+								CharacterViewManager.getInstance()
+								.playAnimation(FixedActivityCoord.TABLE1,
+											   FixedActivityCoord.TABLE1.x - 48, FixedActivityCoord.TABLE1.y);
+								
+								response = response.split("-")[0];
+								AConsumable consumable = Fridge.getConsumable(response);
+								//consumable.visit(GameState.getInstance().getCharacter());
+							}
+						}
 						catch (InterruptedException | SlickException e) {
 							e.printStackTrace();
 						}
@@ -306,9 +317,36 @@ public class ActionSpotManager extends UIManager {
 	}
 	
 	private static void loadGarden() {
-		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN1, ActionSpot.Type.PICKUP));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN2, ActionSpot.Type.PICKUP));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN3, ActionSpot.Type.PICKUP));
+		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN1, ActionSpot.Type.PICKUP) {
+			@Override
+			public void action() {
+				Thread t = new Thread() {
+					@Override
+					public void run() {	GardenManager.pickupConsumable(0); }
+				};
+				t.start();
+			}
+		});
+		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN2, ActionSpot.Type.PICKUP) {
+			@Override
+			public void action() {
+				Thread t = new Thread() {
+					@Override
+					public void run() {	GardenManager.pickupConsumable(1); }
+				};
+				t.start();
+			}
+		});
+		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN3, ActionSpot.Type.PICKUP) {
+			@Override
+			public void action() {
+				Thread t = new Thread() {
+					@Override
+					public void run() {	GardenManager.pickupConsumable(2); }
+				};
+				t.start();
+			}
+		});
 	}
 	
 	private static void loadExit() {
@@ -436,7 +474,7 @@ public class ActionSpotManager extends UIManager {
 			}
 		}
 		
-		public void action() {}
+		public void action() {  }
 		
 		public void draw(Graphics g, float xOffset, float yOffset) {
 			float spotRenderX = this.getX() + xOffset - this.getW(),

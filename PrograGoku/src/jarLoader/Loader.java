@@ -1,7 +1,7 @@
 package jarLoader;
 
 import ADT.ConsumableFactory;
-import ADT.Garden;
+import ADT.GardenFactory;
 import ADT.SicknessPool;
 import Consumables.Drugs.Ativian;
 import Consumables.Drugs.Ibuprofen;
@@ -26,12 +26,12 @@ import Sickness.Headache;
 import Sickness.Obesity;
 
 public class Loader {
-	public Garden garden;
+	public GardenFactory garden;
 	
 	public Loader() {
 		load();
 	}
-
+	
 	public void load () {
 		Arthritis arthritis = new Arthritis();
 		Cancer cancer = new Cancer();
@@ -85,6 +85,6 @@ public class Loader {
 		drugs.addConsumable(ibuprofen.getName(), ibuprofen);
 		drugs.addConsumable(senzu_Bean.getName(), senzu_Bean);
 		
-		this.garden = new Garden(drugs, meals);
+		this.garden = new GardenFactory(drugs, meals);
 	}
 }

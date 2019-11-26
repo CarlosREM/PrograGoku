@@ -18,6 +18,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 	private int fatigue;
 	private ArrayList<ASickness> sickness;	
 	private boolean immortal;
+	private int hunger;
 	
 	public ExtendedCharacter(String name) {		
 		super(name, null, 100, 100, 0, 1, 0, 0, 0, new ArrayList<>() , 0, 0);
@@ -30,8 +31,17 @@ public class ExtendedCharacter extends DefaultCharacter {
 		this.fatigue = 0;
 		this.sickness = new ArrayList<>();
 		this.immortal = false;
+		this.hunger = 0;
 	}
 	
+	public int getHunger() {
+		return hunger;
+	}
+
+	public void setHunger(int hunger) {
+		this.hunger = hunger;
+	}
+
 	@Override
 	public IPrototype deepClone() {
 		return null;

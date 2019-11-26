@@ -15,7 +15,15 @@ public abstract class AMeal extends AConsumable {
 		if (cHP+this.nutriment<100) {
 			character.setCurrentHealthPoints(cHP+this.nutriment);
 		}else {
-			character.setCurrentHealthPoints(cHP+this.nutriment);	
+			character.setCurrentHealthPoints(100);	
+		}
+		decreaseHunger(character);
+	}
+	public void decreaseHunger(ExtendedCharacter character) {
+		character.decreaseHunger(this.nutriment);
+		int fat = character.getHunger();
+		if(fat<0) {
+			character.decreaseMusculature(-fat);
 		}
 	}
 	

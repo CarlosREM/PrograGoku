@@ -204,9 +204,12 @@ public class ExtendedCharacter extends DefaultCharacter {
 	public void decreaseHunger(int amount) {
 		this.hunger -= amount;
 		if(hunger<0) {
-			this.hunger = 0;
+			    System.out.println("hunger"+hunger);
+				increaseMusculature(hunger);
+				System.out.println("musculature"+musculature);
+			}
 		}			
-	}
+	
 
 	
 	

@@ -21,10 +21,6 @@ public abstract class AMeal extends AConsumable {
 	}
 	public void decreaseHunger(ExtendedCharacter character) {
 		character.decreaseHunger(this.nutriment);
-		int fat = character.getHunger();
-		if(fat<0) {
-			character.decreaseMusculature(-fat);
-		}
 	}
 	
 	public void raisePee(ExtendedCharacter character) {

@@ -1,6 +1,7 @@
 package Sickness;
 
 import ADT.ExtendedCharacter;
+import ADT.GenerateSicknessChance;
 import abstraction.ASickness;
 
 public class Cold extends ASickness{
@@ -12,8 +13,13 @@ public class Cold extends ASickness{
 
 	@Override
 	public void visit(ExtendedCharacter character) {
-		// TODO Auto-generated method stub
-		
+		if(!character.getSickness().contains(this)) {
+			if(GenerateSicknessChance.applySicknes(20))
+				character.getSickness().add(this);
+			else
+				return;
+		}
+		character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
 	}
 
 }

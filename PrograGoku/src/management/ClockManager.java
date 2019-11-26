@@ -1,6 +1,8 @@
 package management;
 
 import ADT.GameState;
+import ADT.SicknessPool;
+import abstraction.ASickness;
 import view.GameOverlay;
 import view.GameScreen;
 
@@ -54,11 +56,16 @@ public class ClockManager implements Runnable {
 							GameOverlay.setDate(GameState.getInstance().getDateString());
 						}
 						GameOverlay.setTime(getClockString());
-						if (hours == 6)
+						if (hours == 6) {
 							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_DAY);
-						else if (hours == 18)
+							askSicknessAsign();
+							//preguntar si esta muerto
+						}
+						else if (hours == 18) {
 							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_NIGHT);
-						
+							askSicknessAsign();
+							//preguntar si esta muerto
+						}
 						//demas acciones
 						growGarden();
 				}
@@ -68,8 +75,7 @@ public class ClockManager implements Runnable {
 			}
 		}
 	}
-	
-	
+		
 	private void growGarden() {
 		switch(hours) { 
 		case 6: case 16:
@@ -83,6 +89,14 @@ public class ClockManager implements Runnable {
 		case 10: case 20:
 			GardenManager.loadGardenSpot(2);
 			break;
+		}
+	}
+
+	private void askSicknessAsign() {
+		if(!GameState.getInstance().getCharacter().isImmortal()) {
+			for(ASickness sickness : SicknessPool.sickness.values()) {
+				sickness.visit(GameState.getInstance().getCharacter());
+			}
 		}
 	}
 	

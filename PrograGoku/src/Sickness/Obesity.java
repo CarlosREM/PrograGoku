@@ -1,18 +1,27 @@
 package Sickness;
 
 import ADT.ExtendedCharacter;
+import ADT.GenerateSicknessChance;
 import abstraction.ASickness;
 
 public class Obesity extends ASickness{
 
 	public Obesity() {
 		super("Obesity", 15);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void visit(ExtendedCharacter character) {
-		// TODO Auto-generated method stub
+		if(!character.getSickness().contains(this)) {
+			if(character.getMusculature() <= 20)
+				if(GenerateSicknessChance.applySicknes(100 - character.getMusculature()))
+					character.getSickness().add(this);
+				else
+					return;
+		}
+		if(character.getFatigue() < 85)
+			character.setFatigue(character.getFatigue() + this.getDamage());
+		character.setCurrentHealthPoints(character.getCurrentHealthPoints() - this.getDamage());
 		
 	}
 

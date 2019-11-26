@@ -1,6 +1,7 @@
 package management;
 
 import ADT.GameState;
+import ADT.MoodVisitor;
 import ADT.SicknessPool;
 import abstraction.ASickness;
 import view.GameOverlay;
@@ -62,17 +63,15 @@ public class ClockManager implements Runnable {
 						//GameState.getInstance().getCharacter().setHunger();
 					}
 					//preguntar si esta muerto
+					
+					setMusic();
+					
+					growGarden();
+					checkHunger();
+					checkSicknesses();
+					GameState.getInstance().getCharacter().visit(MoodVisitor.getInstance());
+					GameOverlay.update(GameState.getInstance().getCharacter());
 				}
-				//demas acciones
-				setMusic();
-				
-				checkSicknesses();
-				
-				growGarden();
-				
-				checkHunger();
-						
-				GameOverlay.update(GameState.getInstance().getCharacter());
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();

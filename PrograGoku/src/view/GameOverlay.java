@@ -186,6 +186,8 @@ public class GameOverlay extends UIManager {
 		g.setColor(textColor);
 		g.drawString("Fat", offsetX, offsetY + 32 + 40);
 		g.drawString("Fit", offsetX + 150, offsetY + 32 + 40);
+		if (MainGame.debug)
+			g.drawString("" + statMusculature, offsetX + 75, offsetY + 32 + 40);
 		
 		g.setColor(Color.white);
 		

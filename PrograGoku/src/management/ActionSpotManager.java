@@ -118,13 +118,8 @@ public class ActionSpotManager extends UIManager {
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
-						try {
-							String response = DialogManager.getDialogResponse();
-							System.out.println(response);
-						}
-						catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						try { DialogManager.getDialogResponse(); }
+						catch (InterruptedException e) { e.printStackTrace(); }
 					}
 				};
 				dialogThread.start();
@@ -140,13 +135,8 @@ public class ActionSpotManager extends UIManager {
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
-						try {
-							String response = DialogManager.getDialogResponse();
-							System.out.println(response);
-						}
-						catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						try { DialogManager.getDialogResponse(); }
+						catch (InterruptedException e) { e.printStackTrace(); }
 					}
 				};
 				dialogThread.start();
@@ -165,13 +155,8 @@ public class ActionSpotManager extends UIManager {
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
-						try {
-							String response = DialogManager.getDialogResponse();
-							System.out.println(response);
-						}
-						catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						try { DialogManager.getDialogResponse(); }
+						catch (InterruptedException e) { e.printStackTrace(); }
 					}
 				};
 				dialogThread.start();
@@ -184,13 +169,8 @@ public class ActionSpotManager extends UIManager {
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
-						try {
-							String response = DialogManager.getDialogResponse();
-							System.out.println(response);
-						}
-						catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						try { DialogManager.getDialogResponse(); }
+						catch (InterruptedException e) { e.printStackTrace(); }
 					}
 				};
 				dialogThread.start();
@@ -203,13 +183,8 @@ public class ActionSpotManager extends UIManager {
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
-						try {
-							String response = DialogManager.getDialogResponse();
-							System.out.println(response);
-						}
-						catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						try { DialogManager.getDialogResponse(); }
+						catch (InterruptedException e) { e.printStackTrace(); }
 					}
 				};
 				dialogThread.start();
@@ -222,13 +197,8 @@ public class ActionSpotManager extends UIManager {
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
-						try {
-							String response = DialogManager.getDialogResponse();
-							System.out.println(response);
-						}
-						catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						try { DialogManager.getDialogResponse(); }
+						catch (InterruptedException e) { e.printStackTrace(); }
 					}
 				};
 				dialogThread.start();

@@ -19,9 +19,21 @@ public class ExtendedCharacter extends DefaultCharacter {
 	private ArrayList<ASickness> sickness;	
 	private boolean immortal;
 	
+	public ExtendedCharacter(String name) {		
+		super(name, null, 100, 100, 0, 1, 0, 0, 0, new ArrayList<>() , 0, 0);
+		this.mood = Mood.HAPPY;
+		this.pee = 0;
+		this.poop = 0;
+		this.isHurt = false;
+		this.mentalHealth = 100;
+		this.musculature = 50;
+		this.fatigue = 0;
+		this.sickness = new ArrayList<>();
+		this.immortal = false;
+	}
+	
 	@Override
 	public IPrototype deepClone() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

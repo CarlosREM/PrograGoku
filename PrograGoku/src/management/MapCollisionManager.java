@@ -29,9 +29,9 @@ public class MapCollisionManager {
 /*4*/	rectangles.add(new ColliderRect(32*42, 32*12, 32*18, 32*14)); 		//map right - top
 /*5*/	rectangles.add(new ColliderRect(32*42, 32*28, 32*18, 32*7)); 		//map right - bottom
 		
-/*6*/	rectangles.add(new ColliderRect(32*2, 32*12, 32*9, 32*7)); 			//pool
-		
-/*7*/	rectangles.add(new ColliderRect(32*9, 32*19, 32*2, 32*1 + 8)); 		//backyard sign
+/*6*/	rectangles.add(new ColliderRect(32*2, 32*18, 32*9, 32*1)); 			//backyard - pool
+/*6*/	rectangles.add(new ColliderRect(32*9, 32*12, 32*2, 32*6)); 			//backyard - pool / arena
+/*7*/	rectangles.add(new ColliderRect(32*9, 32*19, 32*2, 32*1 + 8)); 		//backyard - sign
 		
 /*8*/	rectangles.add(new ColliderRect(32*2, 32*24, 32*3, 32*11)); 		//arena - left 
 /*9*/	rectangles.add(new ColliderRect(32*5, 32*24, 32*3, 32*2)); 			//arena - top left
@@ -52,7 +52,7 @@ public class MapCollisionManager {
 /*23*/	rectangles.add(new ColliderRect(32*31, 32*19, 32*11, 32*3)); 		//house - bedroom top & frontdoor
 /*24*/	rectangles.add(new ColliderRect(32*31, 32*22, 32*1, 32*2)); 		//house - bedroom left
 /*25*/	rectangles.add(new ColliderRect(32*34, 32*22, 32*1, 32*1)); 		//house - nightstand
-/*26*/	rectangles.add(new ColliderRect(32*35, 32*22, 32*2, 32*2)); 		//house - bed
+/*26*/	rectangles.add(new ColliderRect(32*35, 32*22, 32*2, 32*2-6)); 		//house - bed
 /*27*/	rectangles.add(new ColliderRect(32*37, 32*22, 32*2, 32*4)); 		//house - frontdoor left
 /*28*/	rectangles.add(new ColliderRect(32*17, 32*26, 32*22, 32*4)); 		//house - bottom
 	

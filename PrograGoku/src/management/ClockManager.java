@@ -2,6 +2,7 @@ package management;
 
 import ADT.GameState;
 import view.GameOverlay;
+import view.GameScreen;
 
 public class ClockManager implements Runnable {
 	
@@ -53,6 +54,10 @@ public class ClockManager implements Runnable {
 							GameOverlay.setDate(GameState.getInstance().getDateString());
 						}
 						GameOverlay.setTime(getClockString());
+						if (hours == 6)
+							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_DAY);
+						else if (hours == 18)
+							GameScreen.getInstance().setMusicState(GameScreen.MUSIC_NIGHT);
 						
 						//demas acciones
 	

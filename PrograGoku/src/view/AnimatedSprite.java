@@ -8,8 +8,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
-import management.FixedActivityCoord;
-
 public class AnimatedSprite {
 
 	private float x, y;
@@ -67,9 +65,5 @@ public class AnimatedSprite {
 			animations.get(currentAnimation).getImage(0).draw(x, y);
 		else
 			animations.get(currentAnimation).draw(x, y);
-	}
-	public void setPosition(FixedActivityCoord activityLocation) {
-		this.x = activityLocation.x;
-		this.y = activityLocation.y;
 	}
 }

@@ -3,7 +3,7 @@ package ADT;
 public class GameState {
 	private static GameState instance = null;
 	private ExtendedCharacter character;
-	private int year = 0;
+	private int year = 1;
 	private int day = 1;
 	private static int maxYearDays = 5;
 	
@@ -49,7 +49,7 @@ public class GameState {
 		this.day += 1;
 		if(this.day == maxYearDays) {
 			increaseYear();
-			setDay(0);
+			setDay(1);
 		}
 	}
 	

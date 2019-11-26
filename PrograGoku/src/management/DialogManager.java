@@ -50,7 +50,6 @@ public class DialogManager extends UIManager {
 			Thread.sleep(100);
 		}
 		String response = currentDialog.responseSelected;
-		SoundManager.playSound("dialogSelect");
 		closeDialog();
 		return response;
 	}
@@ -123,6 +122,14 @@ public class DialogManager extends UIManager {
 			String[] lines = message.split("\n");
 			
 			height = 26 + lines.length*16 + 8; //upper offset + number of lines * 16 + lower offset
+			switch(type) {
+				case TYPE_LIST:
+					height += optionListSize*16 + 5*32; // option list size + available commands
+					break;
+				case TYPE_OK: case TYPE_YES_NO:
+					height += 32;
+
+			}
 			float tempWidth;
 			for (String line : lines) {
 				tempWidth = 16 + line.length()*10 + 16; // left offset + number of chars + right offset;
@@ -136,18 +143,16 @@ public class DialogManager extends UIManager {
 					if (tempWidth > width)
 						width = tempWidth;
 				}
-				height += optionListSize*16 + 3*68; // option list size + available commands
-			}
-			
-			if (type != TYPE_MESSAGE)
-				height += 32;
+			}			
 		}
 		
 		// INPUT CHECK
 		
 		void checkOkInput(Input input) {
-			if (input.isKeyPressed(Input.KEY_ENTER))
+			if (input.isKeyPressed(Input.KEY_ENTER)) {
 				responseSelected = responses.get(responseHovered);
+				SoundManager.playSound("dialogSelect");
+			}
 		}
 		
 		void checkYesNoInput(Input input) {
@@ -155,10 +160,12 @@ public class DialogManager extends UIManager {
 			if (input.isKeyPressed(Input.KEY_N)) {
 				keyPress = true;
 				responseHovered = 0;
+				SoundManager.playSound("dialogDismiss");
 			}
 			else if (input.isKeyPressed(Input.KEY_Y)) {
 				keyPress = true;
 				responseHovered = 1;
+				SoundManager.playSound("dialogSelect");
 			}
 			
 			if (keyPress)
@@ -166,20 +173,19 @@ public class DialogManager extends UIManager {
 		}
 		
 		void checkListInput(Input input) {
-			boolean navigate = false,
-					close = false;
+			boolean close = false;
 			
 			if (input.isKeyPressed(Input.KEY_UP)) {
-				navigate = true;
 				if (responseHovered > 0) {
+					SoundManager.playSound("dialogNavigate");
 					responseHovered -= 1;
 					if (responseHovered < optionMinIndex)
 						optionMinIndex -= 1;
 				}
 			}
 			else if (input.isKeyPressed(Input.KEY_DOWN)) {
-				navigate = true;
 				if (responseHovered < (responses.size()-1)) {
+					SoundManager.playSound("dialogNavigate");
 					responseHovered += 1;
 					if (responseHovered == (optionMinIndex + optionListSize))
 						optionMinIndex += 1;
@@ -187,16 +193,11 @@ public class DialogManager extends UIManager {
 			}
 			
 			else if (input.isKeyPressed(Input.KEY_ESCAPE)) {
-				close = true;
+				SoundManager.playSound("dialogDismiss");
+				responseSelected = "Cancel";
 			}
 			else if (input.isKeyPressed(Input.KEY_ENTER)) {
-				close = true;
-			}
-			
-			if (navigate)
-				SoundManager.playSound("dialogNavigate");
-			
-			else if (close) {
+				SoundManager.playSound("dialogSelect");
 				responseSelected = responses.get(responseHovered);
 			}
 		}
@@ -247,10 +248,7 @@ public class DialogManager extends UIManager {
 			g.drawString("[Y] YES", x + width - 96, y + height - 32);
 		}
 		
-		void drawListDialog(Graphics g) {
-			if (height < GameOverlay.getHeight())
-				height += GameOverlay.getHeight();
-						
+		void drawListDialog(Graphics g) {					
 			float y =  MainGame.screenHeight - height;
 			
 			// LAYOUT

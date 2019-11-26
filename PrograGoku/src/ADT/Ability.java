@@ -5,11 +5,13 @@ import abstraction.IPrototype;
 public class Ability extends DefaultWeapon{
 
 	public Ability() {
-	 super();	
+		super();	
+	 
 	}
+	
+	
 	@Override
 	public IPrototype deepClone() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

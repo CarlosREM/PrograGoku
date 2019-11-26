@@ -11,12 +11,15 @@ import management.ClockManager;
 import management.DialogManager;
 import management.FixedActivityCoord;
 import management.MapCollisionManager;
+import management.CharacterViewManager;
 import management.SoundManager;
 
 public class GameScreen extends BasicGameState {
 	private int stateId;
 	
 	private static GameScreen instance = null;
+	
+	private CharacterViewManager playerViewManager;
 	
 	// DEBUG
 	private String strMouse = "No input",
@@ -26,48 +29,63 @@ public class GameScreen extends BasicGameState {
 	
 	// INTERRUPTIONS
 	private boolean paused,
-				    dialogPause;
-	private static Color pausedTint = new Color(0, 0, 0, 175); //r, g, b, alpha
+				    dialogPause,
+				    inBattle;
+	private static final Color pausedTint = new Color(0, 0, 0, 175); //r, g, b, alpha
 
-	public boolean getPaused() { return paused; } 
+	public boolean isPaused() { return paused; } 
 	public void setPaused(boolean state, boolean isDialog) {
 		clockManager.setPause(state);
 		paused = state;
 		dialogPause = isDialog;
-		setLockPosition(state);
-		character.setIdle(state);
+		playerViewManager.setLockPosition(state);
+		playerViewManager.setCharacterIdle(state);
 		musicVolume = (paused) ? 0.1f : 0.3f;
 		SoundManager.setVolume(musicVolume);
 	}
 	
+	public boolean isInBattle() { return inBattle; }
+	public void setInBattle(boolean state) {
+		inBattle = state;
+		if (state) {
+			previousMusicState = musicState;
+			musicState = 2;
+		}
+		else {
+			musicState = previousMusicState;
+			previousMusicState = -1;
+		}
+	}
 	
 	// CAMERA & BACKGROUND
 	private BigImage background;
 	
 	private float camX, camY,
 				  maxCamX, maxCamY,
-				  camMoveSpeed = 0.8f;
+				  camMoveSpeed = 1;
 	
-	// CHARACTER INFO
-	private AnimatedSprite character;
-	private ColliderRect playerCollider;
-	private float charMoveX, charMoveY,
-				  charMoveSpeed = 0.5f;
-	
-	private boolean lockPosition = false;
-	public void setLockPosition(boolean state) { lockPosition = state; }
+	public float getCamX() { return camX; }
+	public float getCamY() { return camY; }
 	
 	// LOGIC
 	private ClockManager clockManager;
 	private Thread clockThread;
 	
 	// MISC
-	private static int musicState = 0;
-	private static float musicVolume = 0.3f;
-	private static String[] musicTracks;
+	public static final int MUSIC_NIGHT = 0,
+							MUSIC_DAY = 1,
+							MUSIC_BATTLE = 2;
 	
-	private static final String res = "res/images/game/";
-	
+	private int musicState = MUSIC_NIGHT,
+				previousMusicState = -1;
+	private float musicVolume = 0.3f;
+	private String[] musicTracks;
+	public void setMusicState(int musicState) {
+		if (!inBattle)
+			this.musicState = musicState;
+		else
+			this.previousMusicState = musicState;
+	}	
 	
 	private GameScreen() {
 		this.stateId = MainGame.gameScreen;
@@ -82,21 +100,12 @@ public class GameScreen extends BasicGameState {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) {
 		setPaused(false, false);
-		setLockPosition(false);
 		musicState = 0;
 		
 		camX = -(FixedActivityCoord.ACTION_BED.x) + MainGame.screenWidth/2;
 		camY = -(FixedActivityCoord.ACTION_BED.y + 32) + MainGame.screenHeight/2;
 		
-		playerCollider.setPosition(MainGame.screenWidth/2 - playerCollider.getW()/2,
-								   MainGame.screenHeight/2 - playerCollider.getH()/2);
-		
-		character.setIdle(true);
-		character.setPosition(playerCollider.getCenterX() - character.getWidth()/2,
-	  			  			  playerCollider.getY2() - character.getHeight());
-		
-		charMoveX = playerCollider.getCenterX();
-		charMoveY = playerCollider.getCenterY();
+		playerViewManager.startingPos();
 		
 		if (clockThread.isAlive()) {
 			clockManager.stop();
@@ -108,20 +117,18 @@ public class GameScreen extends BasicGameState {
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		background = new BigImage(res + "GameMap.png");
+		background = new BigImage("res/images/game/GameMap.png");
 		
 		maxCamX = -1*background.getWidth() + MainGame.screenWidth;
 		maxCamY = -1*background.getHeight() + MainGame.screenHeight - (GameOverlay.getHeight()-10);
-
-		character = new AnimatedSprite(res + "spr_character.png", 32, 48, 120);
-		playerCollider = new ColliderRect(28, 14);
-				
+		
+		playerViewManager = CharacterViewManager.getInstance();
 		MapCollisionManager.init();
 		ActionSpotManager.init();
 		
-		musicTracks = new String[] {"daytime", "nighttime", "battle"};
+		musicTracks = new String[] {"nighttime", "daytime", "battle"};
 		
-		GameOverlay.init("Happy?", 50, 50, 50, 50, 50, 50, null);
+		GameOverlay.init("Happy", 50, 50, 50, 50, 50, 50, null);
 		
 		clockManager = new ClockManager();
 		clockThread = new Thread(clockManager);
@@ -139,14 +146,12 @@ public class GameScreen extends BasicGameState {
 		// ACTION SPOTS
 		ActionSpotManager.draw(g, camX, camY);
 
-		if (!character.isIdle()) {
+		if (!playerViewManager.isCharacterIdle() && !playerViewManager.isPlayingAnimation()) {
 			g.setColor(Color.red);
-			g.fillOval(charMoveX-8, charMoveY-4, 16, 8);
-			g.setColor(Color.white);
+			g.fillOval(playerViewManager.getMoveX() - 8, playerViewManager.getMoveY() - 4, 16, 8);
 		}
 		
-		playerCollider.draw(g);
-		character.draw();
+		playerViewManager.drawCharacter(g);
 
 		// PAUSED
 		if (paused) {
@@ -162,6 +167,13 @@ public class GameScreen extends BasicGameState {
 		}
 		
 		// UI OVERLAY 
+		if (playerViewManager.isPlayingAnimation()) {
+			float offsetY = MainGame.screenHeight - GameOverlay.getHeight() - 18;
+			g.setColor(pausedTint);
+			g.fillRect(0, offsetY - 2, MainGame.screenWidth, 32);
+			g.setColor(Color.white);
+			g.drawString("Press [SPACE] to exit action.", 0, offsetY);
+		}
 		GameOverlay.drawTime(g);
 		GameOverlay.drawPlayerStats(g);
 		
@@ -172,8 +184,7 @@ public class GameScreen extends BasicGameState {
 		if (MainGame.debug) {
 			g.setColor(pausedTint);
 			g.fillRect(0, 0, 360, 160);
-			g.setColor(Color.white);
-			
+			g.setColor(Color.white);			
 			g.drawString("Current State: " + getID(), 10, 30);
 			g.drawString("[MUSIC] : \"" + musicTracks[musicState] + "\" - V:" + musicVolume, 10, 50);
 			g.drawString(strMouse, 10, 70);
@@ -199,17 +210,17 @@ public class GameScreen extends BasicGameState {
 		
 		if (MainGame.debug) {
 			strMouse = "[MOUSE] X:" + mouseX + " - Y:" + mouseY;
-			strCam = "[CAM] X:" + camX + " - Y:" + camY;
-			strPosition = "[CHAR POS] X:" + playerCollider.getCenterX() + " - Y:" + playerCollider.getCenterY();
-			strMoving = "[MOVING TO] X:" + charMoveX + " - Y: " + charMoveY;
+			strCam = "[CAM] X:" + (-camX) + " - Y:" + (-camY);
+			strPosition = "[CHAR POS] X:" + playerViewManager.getCharX() + " - Y:" + playerViewManager.getCharY();
+			strMoving = "[MOVING TO] X:" + playerViewManager.getMoveX() + " - Y: " + playerViewManager.getMoveY();
 		}
 				
 		if (!paused){
 			moveCamera(mouseX, mouseY);
 			checkCharacterMove(input);
-			moveCharacter();
-			checkCharacterCollision();
-			checkCharacterInteraction();
+			playerViewManager.moveCharacter(camX, camY);
+			playerViewManager.checkMapCollision(camX, camY);
+			playerViewManager.checkActionSpotTrigger(camX, camY);
 		}
 		else if (dialogPause)
 			DialogManager.checkDialogInput(input);
@@ -220,115 +231,41 @@ public class GameScreen extends BasicGameState {
 	private void moveCamera(int mouseX, int mouseY) {
 		if (mouseX < 30 && camX < 0) {
 			camX += camMoveSpeed;
-			playerCollider.setX(playerCollider.getX() + camMoveSpeed);
-			charMoveX += camMoveSpeed;
+			playerViewManager.addCharX(camMoveSpeed);
+			playerViewManager.addMoveX(camMoveSpeed);
 		}
 		else if (mouseX > MainGame.screenWidth-30 && camX > maxCamX) {
 			camX -= camMoveSpeed;
-			playerCollider.setX(playerCollider.getX() - camMoveSpeed);
-			charMoveX -= camMoveSpeed;
+			playerViewManager.addCharX(-camMoveSpeed);
+			playerViewManager.addMoveX(-camMoveSpeed);
 		}
 		
 		if (mouseY < 30 && camY < 0) {
 			camY += camMoveSpeed;
-			playerCollider.setY(playerCollider.getY() + camMoveSpeed);
-			charMoveY += camMoveSpeed;
+			playerViewManager.addCharY(camMoveSpeed);
+			playerViewManager.addMoveY(camMoveSpeed);
 		}
 		else if (mouseY > MainGame.screenHeight-30 && camY > maxCamY) {
 			camY -= camMoveSpeed;
-			playerCollider.setY(playerCollider.getY() - camMoveSpeed);
-			charMoveY -= camMoveSpeed;
+			playerViewManager.addCharY(-camMoveSpeed);
+			playerViewManager.addMoveY(-camMoveSpeed);
 		}
 	}
 	
 	private void checkCharacterMove(Input input) {
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-			charMoveX = input.getMouseX();
-			charMoveY= input.getMouseY();
+		if (!playerViewManager.isPlayingAnimation() && input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			playerViewManager.setMovePosition(input.getMouseX(), input.getMouseY());
 		}
 	}
-	
-	private void moveCharacter() {
-		boolean idle = true;
 
-		float charX = playerCollider.getCenterX(),
-			  charY = playerCollider.getCenterY(),
-			  distX = Math.abs(charMoveX - charX),
-			  distY = Math.abs(charMoveY - charY);
-		
-		if (!lockPosition && (distX > charMoveSpeed || distY > charMoveSpeed)) {
-			idle = false;
-			
-			if (distX > charMoveSpeed) {
-				if (charMoveX < charX) { // LEFT
-					playerCollider.setX(playerCollider.getX() - charMoveSpeed);
-					character.setCurrentAnimation(2); // look left
-				}
-				
-				else if (charX < charMoveX) { // RIGHT
-					playerCollider.setX(playerCollider.getX() + charMoveSpeed);
-					character.setCurrentAnimation(3); // look right
-				}
-			}
-			
-			else if (distY > charMoveSpeed) {
-				if (charY < charMoveY) { // DOWN
-					playerCollider.setY(playerCollider.getY() + charMoveSpeed);
-					character.setCurrentAnimation(0); // look down
-				}
-				else if (charMoveY < charY) { // UP
-					playerCollider.setY(playerCollider.getY() - charMoveSpeed);
-					character.setCurrentAnimation(1); // look up
-				}
-			}
-			
-		}
-		
-		if (distX <= charMoveSpeed)
-			playerCollider.setX(charMoveX - playerCollider.getW()/2);
-		if (distY <= charMoveSpeed)
-			playerCollider.setY(charMoveY - playerCollider.getH()/2);
-
-		character.setPosition(playerCollider.getCenterX() - character.getWidth()/2,
-				  			  playerCollider.getY2() - character.getHeight());
-		character.setIdle(idle);
-	}
-
-	private void checkCharacterCollision() {
-		boolean collision = MapCollisionManager.checkCollision(playerCollider, camX, camY);
-		
-		if (collision) {
-			
-			if (playerCollider.getCenterX() > charMoveX) //LEFT
-				playerCollider.setX(playerCollider.getX() + 1);
-		
-			else if (playerCollider.getCenterX() < charMoveX) // RIGHT
-				playerCollider.setX(playerCollider.getX() - 1);
-		
-			if (playerCollider.getCenterY() > charMoveY) // UP
-				playerCollider.setY(playerCollider.getY() + 1);
-
-			else if (playerCollider.getCenterY() < charMoveY) // DOWN
-				playerCollider.setY(playerCollider.getY() - 1);
-
-			
-			charMoveX = playerCollider.getCenterX();
-			charMoveY = playerCollider.getCenterY();
-		}
-	}
-	
-	private void checkCharacterInteraction() throws SlickException {
-		if (ActionSpotManager.checkInteraction(playerCollider, camX, camY)) {
-			charMoveX = playerCollider.getCenterX();
-			charMoveY = playerCollider.getCenterY();
-		}
-	}
-	
 	private void checkKeyboardInteraction(Input input, StateBasedGame sbg) {
 		if (input.isKeyPressed(Input.KEY_ENTER) && !dialogPause) {
 			setPaused(!paused, false);
 		}
 		
+		if (input.isKeyPressed(Input.KEY_SPACE) && playerViewManager.isPlayingAnimation()) {
+			playerViewManager.stopPlayingAnimation();
+		}
 		if (input.isKeyPressed(Input.KEY_ESCAPE) && paused && !dialogPause) {
 			sbg.enterState(MainGame.menuScreen, new FadeOutTransition(), new FadeInTransition());
 		}

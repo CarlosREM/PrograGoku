@@ -18,20 +18,100 @@ public class ActionSpotManager extends UIManager {
 		loadActivities();
 		loadDoors();
 		loadSigns();
-		loadGarden();
 		loadLists();
+		// NO RENDER UNLESS DEBUG
+		loadGarden();
 		loadExit();
-		
-		if (MainGame.debug) {
-			loadAnimationSpots();
-		}
+		loadAnimationSpots();
 	}
 	
 	private static void loadActivities() {
 		actionSpots.add(new ActionSpot(FixedActivityCoord.ACTION_BED, ActionSpot.Type.ACTIVITY) {
 			@Override
 			public void action() {
-				DialogManager.createDialog(DialogManager.TYPE_YES_NO, "This is a reeeeeeeeally loooooong Activity!\nDo you wish to do it or are you gonna chicken out?");
+				DialogManager.createDialog(DialogManager.TYPE_YES_NO, "Take a nap?\nThis will restore your Sleep");
+				Thread dialogThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							String response = DialogManager.getDialogResponse();
+							if (response.equals("YES")) {
+								CharacterViewManager.getInstance()
+								.playAnimation(FixedActivityCoord.SLEEP,
+											   FixedActivityCoord.SLEEP.x, FixedActivityCoord.SLEEP.y + 48);
+							}
+						}
+						catch (InterruptedException | SlickException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				dialogThread.start();
+			}
+		});
+		actionSpots.add(new ActionSpot(FixedActivityCoord.ACTION_TOILET, ActionSpot.Type.ACTIVITY)  {
+			@Override
+			public void action() {
+				DialogManager.createDialog(DialogManager.TYPE_YES_NO, "Use the toilet?\nThis will restore your Toilet");
+				Thread dialogThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							String response = DialogManager.getDialogResponse();
+							if (response.equals("YES")) {
+								CharacterViewManager.getInstance()
+								.playAnimation(FixedActivityCoord.TOILET,
+											   FixedActivityCoord.TOILET.x, FixedActivityCoord.TOILET.y + 48);
+							}
+						}
+						catch (InterruptedException | SlickException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				dialogThread.start();
+			}
+		});
+		actionSpots.add(new ActionSpot(FixedActivityCoord.ACTION_MEDITATE, ActionSpot.Type.ACTIVITY) {
+			@Override
+			public void action() {
+				DialogManager.createDialog(DialogManager.TYPE_YES_NO, "Meditate?\nThis will restore your Mental");
+				Thread dialogThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							String response = DialogManager.getDialogResponse();
+							if (response.equals("YES")) {
+								CharacterViewManager.getInstance()
+								.playAnimation(FixedActivityCoord.ACTION_MEDITATE,
+											   FixedActivityCoord.ACTION_MEDITATE.x, FixedActivityCoord.ACTION_MEDITATE.y);
+							}
+						}
+						catch (InterruptedException | SlickException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				dialogThread.start();
+			}
+		});
+	}
+	
+	private static void loadDoors() {
+		actionSpots.add(new ActionSpot(FixedActivityCoord.FRONTDOOR_IN, FixedActivityCoord.FRONTDOOR_OUT.y + 8));
+		actionSpots.add(new ActionSpot(FixedActivityCoord.FRONTDOOR_OUT, FixedActivityCoord.FRONTDOOR_IN.y - 16));
+		actionSpots.add(new ActionSpot(FixedActivityCoord.BACKDOOR_IN, FixedActivityCoord.BACKDOOR_OUT.y - 16));
+		actionSpots.add(new ActionSpot(FixedActivityCoord.BACKDOOR_OUT, FixedActivityCoord.BACKDOOR_IN.y + 8));
+	}
+	
+	private static void loadSigns() {
+		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_BACKYARD, ActionSpot.Type.SIGN) {
+			@Override
+			public void action() {
+				String msg = "Every time you eat, your Toilet bar will go down."
+						 + "\nYou can go to the toilet to replenish it."
+					   + "\n\nIf it drops too low, you'll get sick!";
+				DialogManager.createDialog(DialogManager.TYPE_OK, msg);
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
@@ -47,22 +127,13 @@ public class ActionSpotManager extends UIManager {
 				dialogThread.start();
 			}
 		});
-		actionSpots.add(new ActionSpot(FixedActivityCoord.ACTION_TOILET, ActionSpot.Type.ACTIVITY));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.ACTION_MEDITATE, ActionSpot.Type.ACTIVITY));
-	}
-	
-	private static void loadDoors() {
-		actionSpots.add(new ActionSpot(FixedActivityCoord.FRONTDOOR_IN, FixedActivityCoord.FRONTDOOR_OUT.y + 8));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.FRONTDOOR_OUT, FixedActivityCoord.FRONTDOOR_IN.y - 16));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.BACKDOOR_IN, FixedActivityCoord.BACKDOOR_OUT.y - 16));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.BACKDOOR_OUT, FixedActivityCoord.BACKDOOR_IN.y + 8));
-	}
-	
-	private static void loadSigns() {
 		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_BATHROOM, ActionSpot.Type.SIGN) {
 			@Override
 			public void action() {
-				DialogManager.createDialog(DialogManager.TYPE_OK, "I'm a sign!\nRead me thoroughly~");
+				String msg = "Every time you eat, your Toilet bar will go down."
+						 + "\nYou can go to the toilet to replenish it."
+					   + "\n\nIf it drops too low, you'll get sick!";
+				DialogManager.createDialog(DialogManager.TYPE_OK, msg);
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
@@ -81,7 +152,12 @@ public class ActionSpotManager extends UIManager {
 		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_BEDROOM, ActionSpot.Type.SIGN) {
 			@Override
 			public void action() {
-				DialogManager.createDialog(DialogManager.TYPE_OK, "This is a really long text message!\nI'm a big ass sign now, dumbass.\nPiss off, will ya?");
+				String msg = "During the day, your Sleep bar will go down."
+						 + "\nUse the bed to replenish it."
+						 + "\nDoing exercises will use your Sleep bar aswell"
+						 + "\nMake sure to sleep often, otherwise you may get sick!"
+					  + "\n-\nPS: The game saves every day at 00:00. You'll spawn next to your bed when you load.";
+				DialogManager.createDialog(DialogManager.TYPE_OK, msg);
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
@@ -97,15 +173,63 @@ public class ActionSpotManager extends UIManager {
 				dialogThread.start();
 			}
 		});
-		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_GARDEN, ActionSpot.Type.SIGN));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_FRONTYARD, ActionSpot.Type.SIGN));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_KITCHEN, ActionSpot.Type.SIGN));
-	}
-	
-	private static void loadGarden() {
-		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN1, ActionSpot.Type.PICKUP));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN2, ActionSpot.Type.PICKUP));
-		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN3, ActionSpot.Type.PICKUP));
+		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_GARDEN, ActionSpot.Type.SIGN)  {
+			@Override
+			public void action() {
+				DialogManager.createDialog(DialogManager.TYPE_OK, "I'm a sign!\nRead me thoroughly~");
+				Thread dialogThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							String response = DialogManager.getDialogResponse();
+							System.out.println(response);
+						}
+						catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				dialogThread.start();
+			}
+		});
+		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_FRONTYARD, ActionSpot.Type.SIGN)  {
+			@Override
+			public void action() {
+				DialogManager.createDialog(DialogManager.TYPE_OK, "I'm a sign!\nRead me thoroughly~");
+				Thread dialogThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							String response = DialogManager.getDialogResponse();
+							System.out.println(response);
+						}
+						catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				dialogThread.start();
+			}
+		});
+		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_KITCHEN, ActionSpot.Type.SIGN)  {
+			@Override
+			public void action() {
+				DialogManager.createDialog(DialogManager.TYPE_OK, "I'm a sign!\nRead me thoroughly~");
+				Thread dialogThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							String response = DialogManager.getDialogResponse();
+							System.out.println(response);
+						}
+						catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				dialogThread.start();
+			}
+		});
 	}
 	
 	private static void loadLists() {
@@ -122,9 +246,14 @@ public class ActionSpotManager extends UIManager {
 					public void run() {
 						try {
 							String response = DialogManager.getDialogResponse();
-							System.out.println(response);
-						}
-						catch (InterruptedException e) {
+							if (!response.equals("Cancel")) {
+								CharacterViewManager.getInstance().setCharPosition(FixedActivityCoord.TABLE1);
+								CharacterViewManager.getInstance().setCharacterLookingDirection(CharacterViewManager.LOOK_RIGHT);
+								Thread.sleep(3000);
+								CharacterViewManager.getInstance().setCharPosition(FixedActivityCoord.TABLE1.x - 48,
+																				FixedActivityCoord.TABLE1.y);
+							}						}
+						catch (InterruptedException | SlickException e) {
 							e.printStackTrace();
 						}
 					}
@@ -132,7 +261,7 @@ public class ActionSpotManager extends UIManager {
 				dialogThread.start();
 			}
 		});
-		actionSpots.add(new ActionSpot(FixedActivityCoord.SIGN_BACKYARD, ActionSpot.Type.LIST) {
+		actionSpots.add(new ActionSpot(FixedActivityCoord.ACTION_TRAIN, ActionSpot.Type.LIST) {
 			@Override
 			public void action() {
 				ArrayList<String> options = new ArrayList<>();
@@ -145,9 +274,28 @@ public class ActionSpotManager extends UIManager {
 					public void run() {
 						try {
 							String response = DialogManager.getDialogResponse();
-							System.out.println(response);
+							switch(response) {
+							case "Option 0":
+								CharacterViewManager.getInstance()
+								.playAnimation(FixedActivityCoord.POOL1, FixedActivityCoord.POOL2,
+											   FixedActivityCoord.POOL1.x, FixedActivityCoord.POOL1.y + 64);
+								break;
+								
+							case "Option 1":
+								CharacterViewManager.getInstance()
+								.playAnimation(FixedActivityCoord.ARENA1, FixedActivityCoord.ARENA2,
+											   FixedActivityCoord.ARENA1.x + 64, FixedActivityCoord.ARENA1.y);
+								break;
+								
+							case "Option 2":
+								CharacterViewManager.getInstance()
+								.playAnimation(FixedActivityCoord.FIELD1, FixedActivityCoord.FIELD3,
+											   FixedActivityCoord.FIELD2.x, FixedActivityCoord.FIELD2.y);
+								break;
+								
+							}
 						}
-						catch (InterruptedException e) {
+						catch (InterruptedException | SlickException e) {
 							e.printStackTrace();
 						}
 					}
@@ -155,6 +303,12 @@ public class ActionSpotManager extends UIManager {
 				dialogThread.start();
 			}
 		});
+	}
+	
+	private static void loadGarden() {
+		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN1, ActionSpot.Type.PICKUP));
+		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN2, ActionSpot.Type.PICKUP));
+		actionSpots.add(new ActionSpot(FixedActivityCoord.GARDEN3, ActionSpot.Type.PICKUP));
 	}
 	
 	private static void loadExit() {
@@ -215,9 +369,16 @@ public class ActionSpotManager extends UIManager {
 	
 	public static void draw(Graphics g, float xOffset, float yOffset) {
 		g.setLineWidth((float) 1.5);
-		for (ActionSpot spot : actionSpots)
-			spot.draw(g, xOffset, yOffset);
 		
+		int spotCount = actionSpots.size();
+		if (!MainGame.debug)
+			spotCount -= 17;
+		
+		ActionSpot spot;
+		for (int i = 0; i < spotCount; i++) {
+			spot = actionSpots.get(i);
+			spot.draw(g, xOffset, yOffset);
+		}
 		g.resetLineWidth();
 		g.setColor(Color.white);
 	}
@@ -275,9 +436,7 @@ public class ActionSpotManager extends UIManager {
 			}
 		}
 		
-		public void action() {
-			System.out.println(this.type.name());
-		}
+		public void action() {}
 		
 		public void draw(Graphics g, float xOffset, float yOffset) {
 			float spotRenderX = this.getX() + xOffset - this.getW(),
@@ -287,13 +446,11 @@ public class ActionSpotManager extends UIManager {
 			g.setColor(type.renderColor);
 			
 			if (type != Type.EXIT) {
-				if (type == Type.PICKUP && !MainGame.debug)
-					return;
-				g.fillRoundRect(spotRenderX, spotRenderY, this.getW()*2, this.getH()*2, 1);
+				g.fillRect(spotRenderX, spotRenderY, this.getW()*2, this.getH()*2);
 				g.setColor(type.renderColor.darker());
-				g.drawRoundRect(spotRenderX, spotRenderY, this.getW()*2, this.getH()*2, 1);
+				g.drawRect(spotRenderX, spotRenderY, this.getW()*2, this.getH()*2);
 			}
-			else if (MainGame.debug) {
+			else {
 				spotRenderX += this.getW();
 				spotRenderY += this.getH();
 				g.fillRect(spotRenderX, spotRenderY, this.getW(), this.getH());

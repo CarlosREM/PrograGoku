@@ -5,7 +5,12 @@ public class GameState {
 	private ExtendedCharacter character;
 	private int year = 1;
 	private int day = 1;
-	private static int maxYearDays = 5;
+	private static int maxYearDays;
+	
+	public static void init(int maxYearDays) {
+		GameState.maxYearDays = maxYearDays;
+	}
+	
 	
 	private GameState() {
 

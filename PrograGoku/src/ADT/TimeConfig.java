@@ -9,11 +9,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TimeConfig {
-     public static int clockUpdateLapse;
-     public static int maxYearDays;
+     private int clockUpdateLapse;
+     private int maxYearDays;
      private static TimeConfig config;
      
-     private TimeConfig() {
+     public int getClockUpdateLapse() {
+		return clockUpdateLapse;
+     }
+     public int getMaxYearDays() {
+    	 return maxYearDays;
+     }
+
+	private TimeConfig() {
     	generate(); 
 	}
      
@@ -29,13 +36,15 @@ public class TimeConfig {
     	 Scanner scanner;
 		try {
 			scanner = new Scanner(filePath);
-    	 List<String> tokens = new ArrayList<>();
-    	 while (scanner.hasNext()) {	
-    	    	 tokens.add(scanner.next());
-    	 }
-    	 maxYearDays = Integer.getInteger(tokens.get(1));
-    	 clockUpdateLapse = Integer.getInteger(tokens.get(1));
-		} catch (IOException e) {
+			List<String> tokens = new ArrayList<>();
+			while (scanner.hasNext()) {
+				tokens.add(scanner.next());
+	    	}
+			System.out.println(tokens);
+	    	maxYearDays = Integer.parseInt(tokens.get(1));
+	    	clockUpdateLapse = Integer.parseInt(tokens.get(3));
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}   	 
     	 

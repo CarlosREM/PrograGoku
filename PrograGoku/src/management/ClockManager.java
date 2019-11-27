@@ -4,6 +4,7 @@ import ADT.GameState;
 import ADT.MoodVisitor;
 import ADT.Proxy;
 import ADT.SicknessPool;
+import ADT.TimeConfig;
 import abstraction.ASickness;
 import view.GameOverlay;
 import view.GameScreen;
@@ -16,9 +17,13 @@ public class ClockManager implements Runnable {
 	private boolean paused = false;
 	public void setPause(boolean state) { paused = state; }
 	
-	private static int clockUpdateLapse = 500;
+	private static int clockUpdateLapse;
 	private int minutes = 0;
 	private int hours = 0;
+	
+	public static void init(int clockUpdateLapse) {
+		ClockManager.clockUpdateLapse = clockUpdateLapse;
+	}
 	
 	private boolean increaseTime() {
 		minutes+=15;

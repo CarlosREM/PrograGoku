@@ -4,6 +4,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
 import ADT.TimeConfig;
+import management.ClockManager;
 import view.*;
 
 public class MainGame extends StateBasedGame {
@@ -33,11 +34,13 @@ public class MainGame extends StateBasedGame {
 	public void initStatesList(GameContainer gc) throws SlickException {
 		//starting screen
 		this.enterState(menuScreen);
-		TimeConfig.getInstance();
 	}
 		
 	private static void initResources() {
 		ADT.Loader.load();
+		TimeConfig timeConfig = TimeConfig.getInstance();
+		ClockManager.init(timeConfig.getClockUpdateLapse());
+		ADT.GameState.init(timeConfig.getMaxYearDays());
 	}
 	
 	public static void startup() {

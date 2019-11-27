@@ -290,7 +290,7 @@ public class ActionSpotManager extends UIManager {
 									character.visit(ActivityPool.getActivity("DoPee"));
 								}
 								break;
-							case "I gotta poo!":
+							case "I gotta poop!":
 								if (character.getPoop() > 0) {
 									empty = false;
 									character.visit(ActivityPool.getActivity("DoPoop"));

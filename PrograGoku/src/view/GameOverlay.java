@@ -23,10 +23,12 @@ public class GameOverlay extends UIManager {
 	//STATS - - -
 	private static String time = "23:00", date = "Day 31, Year 10";
 
+	private static String stage = "Toddler";
 	private static String statMood = "Happy";
 	private static float statEnergy = 50,
 					   	 statSleep = 50,
-					   	 statToilet = 50,
+					   	 statPee = 0,
+					   	 statPoop = 0,
 					   	 statHunger = 50,
 					   	 statMental = 50,
 					   	 statMusculature = 50;
@@ -43,7 +45,8 @@ public class GameOverlay extends UIManager {
 		statSleep = 100 - character.getFatigue();
 		statMental = character.getMentalHealth();
 		statHunger = character.getHunger();
-		statToilet = (character.getPee()/2) + (character.getPoop()/2);
+		statPee = character.getPee();
+		statPoop = character.getPoop();
 		statMusculature = character.getMusculature();
 		
 		sicknesses.clear();
@@ -56,20 +59,19 @@ public class GameOverlay extends UIManager {
 		float offsetX = MainGame.screenWidth - 160;
 		g.setColor(transpBlackColor);
 		g.fillRoundRect(offsetX, -cornerRadius,
-						200 + cornerRadius, height/2, 2);
+						200 + cornerRadius, 108, 2);
 		
 		g.setLineWidth(5);
 		g.setColor(Color.black);
 		g.drawRoundRect(offsetX, -cornerRadius,
-						200 + cornerRadius, height/2, 2);
+						200 + cornerRadius, 108, 2);
 		g.resetLineWidth();
 
 		offsetX += 16;
-		g.setLineWidth(5);
 		g.setColor(Color.white);
 		g.drawString(date, offsetX, 12);
 		g.drawString(time, offsetX, 40);
-		g.resetLineWidth();
+		g.drawString("Stage: "+stage, offsetX, 68);
 	}
 	
 	public static void drawPlayerStats(Graphics g) {
@@ -104,15 +106,18 @@ public class GameOverlay extends UIManager {
 		g.drawString("Mental:", offsetX, offsetY + 44 + 32);
 		g.drawString("Hunger:", offsetX + 76 + 150 + 16, offsetY + 44);
 		g.drawString("Toilet:", offsetX + 76 + 150 + 16, offsetY + 44 + 32);
-		
+		g.drawString("pee", offsetX + 76 + 150 + 16 + 96, offsetY + 44 + 32 + 20);
+		g.drawString("poop", offsetX + 76 + 150 + 16 + 168, offsetY + 44 + 32 + 20);
+
 		// STAT BARS
 		g.setColor(transpBlackColor);
-		g.fillRoundRect(offsetX + 76, offsetY, 392, 20, 5);
-		g.fillRoundRect(offsetX + 76, offsetY + 44, 150, 20, 5);
-		g.fillRoundRect(offsetX + 76, offsetY + 44 + 32, 150, 20, 5);
-		g.fillRoundRect(offsetX + 76 + 150 + 16 + 76, offsetY + 44, 150, 20, 5);
-		g.fillRoundRect(offsetX + 76 + 150 + 16 + 76, offsetY + 44 + 32, 150, 20, 5);
-		
+		g.fillRoundRect(offsetX + 76, offsetY, 392, 20, 5); //ENERGY
+		g.fillRoundRect(offsetX + 76, offsetY + 44, 150, 20, 5); // SLEEP
+		g.fillRoundRect(offsetX + 76, offsetY + 44 + 32, 150, 20, 5); // MENTAL
+		g.fillRoundRect(offsetX + 76 + 150 + 16 + 76, offsetY + 44, 150, 20, 5); // HUNGER
+		g.fillRoundRect(offsetX + 76 + 150 + 16 + 76, offsetY + 44 + 32, 150, 20, 5); // TOILET
+		g.fillRect(offsetX + 76 + 150 + 16 + 76 + 75, offsetY + 44 + 32, 1, 20); // Toilet separator
+
 		g.setColor(barColor);
 		if (statEnergy >= 0)
 			g.fillRoundRect(offsetX + 76 + 2, offsetY + 2,
@@ -126,18 +131,21 @@ public class GameOverlay extends UIManager {
 		if (statHunger >= 0)
 			g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44+ 2,
 						   (146f*((float) statHunger/100)), 20 - 4, 5);
-		if (statToilet >= 0)
+		if (statPee >= 0)
 			g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2,
-						   (146f*((float) statToilet/100)), 20 - 4, 5);
+						   (71f*((float) statPee/100)), 20 - 4, 5);
+		if (statPoop >= 0)
+			g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2 + 76, offsetY + 44 + 32 + 2,
+						   (70f*((float) statPoop/100)), 20 - 4, 5);
 		
-		//debug info
 		if (MainGame.debug) {
 			g.setColor(Color.white);
 			g.drawString(""+statEnergy, offsetX + 76 + 2, offsetY + 2);
 			g.drawString(""+statSleep,offsetX + 76 + 2, offsetY + 44 + 2);
 			g.drawString(""+statMental,offsetX + 76 + 2, offsetY + 44 + 32 + 2);
 			g.drawString(""+statHunger, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44+ 2);
-			g.drawString(""+statToilet, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2);
+			g.drawString(""+statPee, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2);
+			g.drawString(""+statPoop, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2);
 		}
 		
 		// div
@@ -190,7 +198,6 @@ public class GameOverlay extends UIManager {
 			g.drawString("" + statMusculature, offsetX + 75, offsetY + 32 + 40);
 		
 		g.setColor(Color.white);
-		
 	}
 
 	private static void drawMoodPortrait(Graphics g, float offsetX, float offsetY) {

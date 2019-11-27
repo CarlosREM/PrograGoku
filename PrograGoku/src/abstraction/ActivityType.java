@@ -1,4 +1,4 @@
-package Activities;
+package abstraction;
 
 public enum ActivityType {
      TOILET,

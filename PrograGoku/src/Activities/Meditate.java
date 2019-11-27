@@ -10,15 +10,14 @@ import abstraction.ActivityType;
 public class Meditate extends AActivity{
 
 	public Meditate() {
-		this.sickness.add(SicknessPool.getSickness
 		super("Meditate", ActivityType.MEDITATE);
-
+		this.sickness.add(SicknessPool.getSickness("Depression"));
 	}
 
 	@Override
 	public void visit(ExtendedCharacter character) {
 		character.increaseMentalHealth(20);
-		character.setMood(Mood.Meditanding);
+		character.setMood(Mood.Meditating);
 		removeSicknesses(character);
 	}
 	

@@ -116,19 +116,19 @@ public class GameOverlay extends UIManager {
 		g.setColor(barColor);
 		if (statEnergy >= 0)
 			g.fillRoundRect(offsetX + 76 + 2, offsetY + 2,
-						   (392f*((float) statEnergy/100)) - 4, 20 - 4, 5);
+						   (388f*((float) statEnergy/100)), 20 - 4, 5);
 		if (statSleep >= 0)
 			g.fillRoundRect(offsetX + 76 + 2, offsetY + 44 + 2,
-						   (150f*((float) statSleep/100)) - 4, 20 - 4, 5);
+						   (146f*((float) statSleep/100)), 20 - 4, 5);
 		if (statMental >= 0)
 			g.fillRoundRect(offsetX + 76 + 2, offsetY + 44 + 32 + 2,
-						   (150f*((float) statMental/100)) - 4, 20 - 4, 5);
+						   (146f*((float) statMental/100)), 20 - 4, 5);
 		if (statHunger >= 0)
 			g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44+ 2,
-						   (150f*((float) statHunger/100)) - 4, 20 - 4, 5);
+						   (146f*((float) statHunger/100)), 20 - 4, 5);
 		if (statToilet >= 0)
 			g.fillRoundRect(offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2,
-						   (150f*((float) statToilet/100)) - 4, 20 - 4, 5);
+						   (146f*((float) statToilet/100)), 20 - 4, 5);
 		
 		//debug info
 		if (MainGame.debug) {
@@ -205,7 +205,8 @@ public class GameOverlay extends UIManager {
 				break;
 				
 			case "Sick":
-				currentColor = greenColor;
+				currentColor = greenColor.brighter(1.5f);
+				break;
 				
 			case "Delicioso":
 				currentColor = redColor.brighter(5f);

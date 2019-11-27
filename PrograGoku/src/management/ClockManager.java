@@ -104,7 +104,7 @@ public class ClockManager implements Runnable {
 		if(hours == 0 || hours == 6 || hours == 12 || hours == 18) {
 			GameState.getInstance().getCharacter().increaseHunger(5);
 			if(GameState.getInstance().getCharacter().getHunger() >= 70)
-				GameState.getInstance().getCharacter().decreaseMentalHealth(5);
+				GameState.getInstance().getCharacter().decreaseHealthPoints(5);
 		}
 	}
 	

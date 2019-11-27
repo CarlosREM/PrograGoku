@@ -3,19 +3,21 @@ package Activities;
 import ADT.ExtendedCharacter;
 import ADT.Mood;
 import ADT.SicknessPool;
+import abstraction.AActivity;
 import abstraction.ASickness;
+import abstraction.ActivityType;
 
-public class Socialize extends AActivity{
+public class Socialize extends AActivity {
 
 	public Socialize() {
-		super("Socialize", ActivityType.TOILET);
+		super("Socialize", ActivityType.MEDITATE);
 		this.sickness.add(SicknessPool.getSickness("Depression"));
 	}
 
 	@Override
 	public void visit(ExtendedCharacter character) {
 		character.increaseMentalHealth(30);
-		character.setMood(Mood.Meditanding);
+		character.setMood(Mood.Meditating);
 		removeSicknesses(character);
 	}
 	

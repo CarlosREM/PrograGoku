@@ -190,8 +190,8 @@ public class GameScreen extends BasicGameState {
 		}
 		
 		if (!dead) {
-			GameOverlay.drawTime(g);
 			GameOverlay.drawPlayerStats(g);
+			GameOverlay.drawTime(g);
 		}
 		else 
 			GameOverlay.drawDeathScreen(g);
@@ -289,11 +289,17 @@ public class GameScreen extends BasicGameState {
 			sbg.enterState(MainGame.menuScreen, new FadeOutTransition(), new FadeInTransition());
 		}
 		
+		if (input.isKeyPressed(Input.KEY_F) && !paused) {
+			SoundManager.playSound("btnClick");
+			ADT.GameState.getInstance().getCharacter().setImmortal(
+					!ADT.GameState.getInstance().getCharacter().isImmortal());
+		}
 		if (input.isKeyPressed(Input.KEY_M) && MainGame.debug) {
 			musicState++;
 			if (musicState == 3)
 				musicState = 0;
 		}
+		
 	}
 
 	public void triggerDeath() {
@@ -314,7 +320,7 @@ public class GameScreen extends BasicGameState {
 						sbg.enterState(MainGame.menuScreen, new FadeOutTransition(), new FadeInTransition());
 					else {
 						ADT.GameState.setInstance(RecoveryPool.getState(response));
-						enter(null, sbg);
+						sbg.enterState(MainGame.gameScreen, new FadeOutTransition(), new FadeInTransition());
 					}
 				}
 				catch (InterruptedException e) {

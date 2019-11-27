@@ -124,6 +124,8 @@ public class ClockManager implements Runnable {
 	}
 	
 	private void growGarden() {
+		if(minutes != 0)
+			return;
 		switch(hours) { 
 		case 6: case 16:
 			GardenManager.loadGardenSpot(0);

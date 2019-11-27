@@ -23,7 +23,7 @@ public class GameOverlay extends UIManager {
 	//STATS - - -
 	private static String time = "23:00", date = "Day 31, Year 10";
 
-	private static String stage = "Toddler";
+	private static String immortal = "False";
 	private static String statMood = "Happy";
 	private static float statEnergy = 50,
 					   	 statSleep = 50,
@@ -48,7 +48,7 @@ public class GameOverlay extends UIManager {
 		statPee = character.getPee();
 		statPoop = character.getPoop();
 		statMusculature = character.getMusculature();
-		
+		immortal = String.valueOf(character.isImmortal());
 		sicknesses.clear();
 		for (ASickness sickness : character.getSickness())
 			sicknesses.add(sickness.getName());
@@ -71,7 +71,7 @@ public class GameOverlay extends UIManager {
 		g.setColor(Color.white);
 		g.drawString(date, offsetX, 12);
 		g.drawString(time, offsetX, 40);
-		g.drawString("Stage: "+stage, offsetX, 68);
+		g.drawString("Immortal: "+immortal, offsetX, 68);
 	}
 	
 	public static void drawPlayerStats(Graphics g) {

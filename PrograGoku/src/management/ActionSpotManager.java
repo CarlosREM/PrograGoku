@@ -7,6 +7,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import ADT.ActivityPool;
+import ADT.ExtendedCharacter;
 import ADT.Fridge;
 import ADT.GameState;
 import abstraction.AConsumable;
@@ -42,29 +44,8 @@ public class ActionSpotManager extends UIManager {
 								CharacterViewManager.getInstance()
 								.playAnimation(FixedActivityCoord.SLEEP,
 											   FixedActivityCoord.SLEEP.x, FixedActivityCoord.SLEEP.y + 48);
-							}
-						}
-						catch (InterruptedException | SlickException e) {
-							e.printStackTrace();
-						}
-					}
-				};
-				dialogThread.start();
-			}
-		});
-		actionSpots.add(new ActionSpot(FixedActivityCoord.ACTION_TOILET, ActionSpot.Type.ACTIVITY)  {
-			@Override
-			public void action() {
-				DialogManager.createDialog(DialogManager.TYPE_YES_NO, "Use the toilet?\nThis will restore your Toilet");
-				Thread dialogThread = new Thread() {
-					@Override
-					public void run() {
-						try {
-							String response = DialogManager.getDialogResponse();
-							if (response.equals("YES")) {
-								CharacterViewManager.getInstance()
-								.playAnimation(FixedActivityCoord.TOILET,
-											   FixedActivityCoord.TOILET.x, FixedActivityCoord.TOILET.y + 48);
+								GameState.getInstance().getCharacter()
+								.visit(ActivityPool.getActivity("Sleep"));
 							}
 						}
 						catch (InterruptedException | SlickException e) {
@@ -88,6 +69,8 @@ public class ActionSpotManager extends UIManager {
 								CharacterViewManager.getInstance()
 								.playAnimation(FixedActivityCoord.ACTION_MEDITATE,
 											   FixedActivityCoord.ACTION_MEDITATE.x, FixedActivityCoord.ACTION_MEDITATE.y);
+								GameState.getInstance().getCharacter()
+								.visit(ActivityPool.getActivity("Meditate"));
 							}
 						}
 						catch (InterruptedException | SlickException e) {
@@ -274,6 +257,55 @@ public class ActionSpotManager extends UIManager {
 											   FixedActivityCoord.FIELD2.x, FixedActivityCoord.FIELD2.y);
 								break;
 								
+							}
+						}
+						catch (InterruptedException | SlickException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				dialogThread.start();
+			}
+		});
+		actionSpots.add(new ActionSpot(FixedActivityCoord.ACTION_TOILET, ActionSpot.Type.LIST) {
+			@Override
+			public void action() {
+				ArrayList<String> options = new ArrayList<>();
+				options.add("I need to pee!");
+				options.add("I gotta poop!");
+				DialogManager.createDialog(DialogManager.TYPE_LIST, "What is your need?", options);
+				Thread dialogThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							String response = DialogManager.getDialogResponse();
+							if (response == "Cancel")
+								return;
+							boolean empty = true;
+							ExtendedCharacter character = GameState.getInstance().getCharacter();								
+							switch(response) {
+							case "I need to pee!":
+								if (character.getPee() > 0) {
+									empty = false;
+									character.visit(ActivityPool.getActivity("DoPee"));
+								}
+								break;
+							case "I gotta poo!":
+								if (character.getPoop() > 0) {
+									empty = false;
+									character.visit(ActivityPool.getActivity("DoPoop"));
+								}
+								break;
+							}
+							if (empty) {
+								DialogManager.createDialog(DialogManager.TYPE_MESSAGE, "I think I have no need for that..");
+								sleep(1500);
+								DialogManager.closeDialog();
+							}
+							else {
+								CharacterViewManager.getInstance()
+								.playAnimation(FixedActivityCoord.TOILET,
+											   FixedActivityCoord.TOILET.x, FixedActivityCoord.TOILET.y + 48);
 							}
 						}
 						catch (InterruptedException | SlickException e) {

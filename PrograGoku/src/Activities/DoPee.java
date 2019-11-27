@@ -2,6 +2,8 @@ package Activities;
 
 import ADT.ExtendedCharacter;
 import ADT.Mood;
+import abstraction.AActivity;
+import abstraction.ActivityType;
 
 public class DoPee extends AActivity{
 

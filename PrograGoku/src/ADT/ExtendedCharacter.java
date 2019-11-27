@@ -123,9 +123,9 @@ public class ExtendedCharacter extends DefaultCharacter {
 	public void visit(IVisitor visitor) {
 		String visitorName = visitor.getClass().getName();
 		Proxy.log.append("Visited by: " + visitorName + "\n");
-		Proxy.log.append("Previous State: " + this.getFullState());
+		Proxy.log.append("Previous State: " + this.getFullState() + "\n");
 		visitor.visit(this);
-		Proxy.log.append("Result State: " + this.getFullState());
+		Proxy.log.append("Result State: " + this.getFullState() + "\n");
 	}
 	
 	public void increasePee(int amount) {

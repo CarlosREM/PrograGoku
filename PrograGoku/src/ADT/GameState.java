@@ -1,14 +1,18 @@
 package ADT;
 
+import java.sql.Time;
+
 public class GameState {
 	private static GameState instance = null;
 	private ExtendedCharacter character;
 	private int year = 1;
 	private int day = 1;
 	private static int maxYearDays;
+	private static int grow;
 	
-	public static void init(int maxYearDays) {
+	public static void init(int maxYearDays,int grow) {
 		GameState.maxYearDays = maxYearDays;
+		GameState.grow = grow;
 	}
 	
 	
@@ -57,9 +61,14 @@ public class GameState {
 			setDay(1);
 		}
 	}
-	
+
 	public void increaseYear() {
 		this.year += 1;
 	}
+	public void levelUp() {
+		if (year%ADT.TimeConfig.getInstance().getGrow()==0) {
+			character.levelUp();
+		}
+	}	
 	
 }

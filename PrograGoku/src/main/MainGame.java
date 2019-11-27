@@ -40,7 +40,7 @@ public class MainGame extends StateBasedGame {
 		ADT.Loader.load();
 		TimeConfig timeConfig = TimeConfig.getInstance();
 		ClockManager.init(timeConfig.getClockUpdateLapse());
-		ADT.GameState.init(timeConfig.getMaxYearDays());
+		ADT.GameState.init(timeConfig.getMaxYearDays(),timeConfig.getGrow());
 	}
 	
 	public static void startup() {

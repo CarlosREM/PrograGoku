@@ -210,6 +210,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 		this.hunger -= amount;
 		if(hunger<0) {
 				increaseMusculature(hunger);
+				this.hunger = 0;
 			}
 		}			
 	

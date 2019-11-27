@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class TimeConfig {
      private int clockUpdateLapse;
      private int maxYearDays;
+     private int grow;
      private static TimeConfig config;
      
      public int getClockUpdateLapse() {
@@ -19,7 +20,9 @@ public class TimeConfig {
      public int getMaxYearDays() {
     	 return maxYearDays;
      }
-
+     public int  getGrow() {
+    	 return grow; 
+     }
 	private TimeConfig() {
     	generate(); 
 	}
@@ -43,6 +46,7 @@ public class TimeConfig {
 			System.out.println(tokens);
 	    	maxYearDays = Integer.parseInt(tokens.get(1));
 	    	clockUpdateLapse = Integer.parseInt(tokens.get(3));
+	    	grow = Integer.parseInt(tokens.get(5));
 		}
 		catch (IOException e) {
 			e.printStackTrace();

@@ -3,6 +3,7 @@ package main;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
+import ADT.TimeConfig;
 import view.*;
 
 public class MainGame extends StateBasedGame {
@@ -32,6 +33,7 @@ public class MainGame extends StateBasedGame {
 	public void initStatesList(GameContainer gc) throws SlickException {
 		//starting screen
 		this.enterState(menuScreen);
+		TimeConfig.getInstance();
 	}
 		
 	private static void initResources() {

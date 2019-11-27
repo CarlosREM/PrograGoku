@@ -240,6 +240,10 @@ public class ExtendedCharacter extends DefaultCharacter {
 		for(ASickness s : this.getSickness()) {
 			state.append(s.getName() + "\n"); 
 		}
+		state.append("Abilities:\n");
+		for(AWeapon s : this.getWeapons()) {
+			state.append(s.getName() + "\n"); 
+		}
 		state.append("-------------------------------------------------\n");
 		return state.toString();
 	}

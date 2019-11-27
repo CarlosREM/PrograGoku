@@ -121,7 +121,11 @@ public class ExtendedCharacter extends DefaultCharacter {
 	}
 
 	public void visit(IVisitor visitor) {
+		String visitorName = visitor.getClass().getName();
+		Proxy.log.append("Visited by: " + visitorName + "\n");
+		Proxy.log.append("Previous State: " + this.getFullState());
 		visitor.visit(this);
+		Proxy.log.append("Result State: " + this.getFullState());
 	}
 	
 	public void increasePee(int amount) {
@@ -218,6 +222,26 @@ public class ExtendedCharacter extends DefaultCharacter {
 		super.setCurrentHealthPoints(super.getCurrentHealthPoints() - amount);
 		if(super.getCurrentHealthPoints() < 0)
 			super.setCurrentHealthPoints(0);
+	}
+	
+	private String getFullState() {
+		StringBuilder state = new StringBuilder();
+		state.append("Health: " + this.getCurrentHealthPoints() + "\n");
+		state.append("Mental Health: " + this.getMentalHealth() + "\n"); 
+		state.append("Mood: " + this.getMood().name() + "\n"); 
+		state.append("Hunger: " + this.hunger + "\n"); 
+		state.append("Fatigue: " + this.fatigue + "\n"); 
+		state.append("Musculature: " + this.getMusculature() + "\n"); 
+		state.append("Immortal: " + this.immortal + "\n"); 
+		state.append("Hurt: " + this.isHurt + "\n"); 
+		state.append("Poop: " + this.poop + "\n"); 
+		state.append("Pee: " + this.pee + "\n"); 
+		state.append("Sicknesses:\n");
+		for(ASickness s : this.getSickness()) {
+			state.append(s.getName() + "\n"); 
+		}
+		state.append("-------------------------------------------------\n");
+		return state.toString();
 	}
 	
 }

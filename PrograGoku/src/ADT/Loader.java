@@ -1,9 +1,9 @@
 package ADT;
 
 public class Loader {
-	  private static jarLoader.Loader jloader;
+	  private static jar.Loader jloader;
       
 	  public static void load() {
-    	   jloader = new jarLoader.Loader();
+    	   jloader = new jar.Loader();
       }
 }

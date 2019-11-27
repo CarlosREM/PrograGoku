@@ -70,7 +70,7 @@ public class ClockManager implements Runnable {
 					checkHunger();
 					checkFatigue();
 					checkSicknesses();
-					//GameState.getInstance().getCharacter().visit(MoodVisitor.getInstance());
+					GameState.getInstance().getCharacter().visit(MoodVisitor.getInstance());
 					generateLog();
 					
 					if (GameState.getInstance().getCharacter().getCurrentHealthPoints() <= 0 &&

@@ -2,6 +2,7 @@ package management;
 
 import ADT.GameState;
 import ADT.MoodVisitor;
+import ADT.Proxy;
 import ADT.SicknessPool;
 import abstraction.ASickness;
 import view.GameOverlay;
@@ -57,13 +58,7 @@ public class ClockManager implements Runnable {
 						GameOverlay.setDate(GameState.getInstance().getDateString());
 					}
 					GameOverlay.setTime(getClockString());
-					
-					if(minutes == 0||minutes == 30)
-					{
-						//GameState.getInstance().getCharacter().setHunger();
-					}
-					//preguntar si esta muerto
-					
+										
 					setMusic();
 					
 					growGarden();
@@ -71,6 +66,7 @@ public class ClockManager implements Runnable {
 					checkFatigue();
 					checkSicknesses();
 					GameState.getInstance().getCharacter().visit(MoodVisitor.getInstance());
+					generateLog();
 					
 					if (GameState.getInstance().getCharacter().getCurrentHealthPoints() <= 0 &&
 						!GameScreen.getInstance().isDead())
@@ -143,6 +139,14 @@ public class ClockManager implements Runnable {
 			for(ASickness sickness : SicknessPool.sickness.values()) {
 				sickness.visit(GameState.getInstance().getCharacter());
 			}
+		}
+	}
+	
+	private void generateLog() {
+		if(minutes != 45)
+			return;
+		if(hours == 23) {
+			Proxy.generateFile();
 		}
 	}
 }

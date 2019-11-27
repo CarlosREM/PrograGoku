@@ -1,8 +1,12 @@
 package management;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 import ADT.GameState;
 import ADT.MoodVisitor;
 import ADT.Proxy;
+import ADT.RecoveryPool;
 import ADT.SicknessPool;
 import ADT.TimeConfig;
 import abstraction.ASickness;
@@ -152,6 +156,7 @@ public class ClockManager implements Runnable {
 			return;
 		if(hours == 23) {
 			Proxy.generateFile();
+			RecoveryPool.addState(GameState.getInstance().getDateString(), GameState.getInstance());
 		}
 	}
 }

@@ -4,12 +4,15 @@ import ADT.ExtendedCharacter;
 import ADT.Mood;
 import ADT.SicknessPool;
 import abstraction.ASickness;
+import abstraction.AActivity;
+import abstraction.ActivityType;
 
 public class Meditate extends AActivity{
 
 	public Meditate() {
-		super("Meditate", ActivityType.TOILET);
-		this.sickness.add(SicknessPool.getSickness("Depression"));
+		this.sickness.add(SicknessPool.getSickness
+		super("Meditate", ActivityType.MEDITATE);
+
 	}
 
 	@Override

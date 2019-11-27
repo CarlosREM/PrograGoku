@@ -1,38 +1,30 @@
 package jarLoader;
 
+import ADT.ActivityPool;
 import ADT.ConsumableFactory;
 import ADT.GardenFactory;
 import ADT.SicknessPool;
-import Consumables.Drugs.Ativian;
-import Consumables.Drugs.Ibuprofen;
-import Consumables.Drugs.Senzu_Bean;
-import Consumables.Meals.Aztec_Soup;
-import Consumables.Meals.Bread;
-import Consumables.Meals.Chicken;
-import Consumables.Meals.Coffee;
-import Consumables.Meals.Fish;
-import Consumables.Meals.Meat;
-import Consumables.Meals.Milk;
-import Consumables.Meals.Noodles;
-import Consumables.Meals.Pizza;
-import Consumables.Meals.Soda;
-import Consumables.Meals.Tea;
-import Consumables.Meals.Water;
-import Sickness.Arthritis;
-import Sickness.Cancer;
-import Sickness.Cold;
-import Sickness.Depression;
-import Sickness.Headache;
-import Sickness.Obesity;
+
+import Sickness.*;
+import Consumables.Drugs.*;
+import Consumables.Meals.*;
+import Activities.*;
 
 public class Loader {
-	public GardenFactory garden;
 	
 	public Loader() {
 		load();
 	}
 	
-	public void load () {
+	public void load() {
+		loadSicknesses();
+		loadConsummables();
+		loadActivities();
+		// -- NO IMPLEMENTADO
+		loadAbilities();
+	}
+	
+	private void loadSicknesses() {
 		Arthritis arthritis = new Arthritis();
 		Cancer cancer = new Cancer();
 		Cold cold = new Cold();
@@ -46,7 +38,16 @@ public class Loader {
 		SicknessPool.addSickness(depression.getName(), depression);
 		SicknessPool.addSickness(headache.getName(), headache);
 		SicknessPool.addSickness(obesity.getName(), obesity);
+	}
+	
+	private void loadConsummables() {
+		ConsumableFactory meals = loadMeals(),
+						  drugs = loadDrugs();
 		
+		GardenFactory.init(drugs, meals);
+	}
+	
+	private ConsumableFactory loadMeals() {
 		Aztec_Soup aztec = new Aztec_Soup();
 		Bread bread = new Bread();
 		Chicken chicken = new Chicken();
@@ -59,10 +60,6 @@ public class Loader {
 		Soda soda = new Soda();
 		Tea tea = new Tea();
 		Water water = new Water();
-		
-		Ativian ativian = new Ativian();
-		Ibuprofen ibuprofen = new Ibuprofen();
-		Senzu_Bean senzu_Bean = new Senzu_Bean();
 		
 		ConsumableFactory meals =  new ConsumableFactory();
 		
@@ -79,12 +76,35 @@ public class Loader {
 		meals.addConsumable(tea.getName(), tea);
 		meals.addConsumable(water.getName(), water);
 		
+		return meals;
+	}
+	private ConsumableFactory loadDrugs() {
+		Ativian ativian = new Ativian();
+		Ibuprofen ibuprofen = new Ibuprofen();
+		Senzu_Bean senzu_Bean = new Senzu_Bean();
+		
 		ConsumableFactory drugs =  new ConsumableFactory(); 
 		
 		drugs.addConsumable(ativian.getName(), ativian);
 		drugs.addConsumable(ibuprofen.getName(), ibuprofen);
 		drugs.addConsumable(senzu_Bean.getName(), senzu_Bean);
 		
-		this.garden = new GardenFactory(drugs, meals);
+		return drugs;
+	}
+	
+	private void loadActivities() {
+		DoPee pee = new DoPee();
+		DoPoop poop = new DoPoop();
+		Meditate meditate = new Meditate();
+		Sleep sleep = new Sleep();
+		
+		ActivityPool.addActivity(pee.getName(), pee);
+		ActivityPool.addActivity(poop.getName(), poop);
+		ActivityPool.addActivity(meditate.getName(), meditate);
+		ActivityPool.addActivity(sleep.getName(), sleep);
+	}
+	
+	private void loadAbilities() {
+		
 	}
 }

@@ -10,11 +10,9 @@ import view.GameScreen;
 
 public class GardenManager extends UIManager {
 
-	private static GardenFactory factory;
 	private static AConsumable[] gardenSpots;
 	
 	public static void init() {
-		factory = ADT.Loader.getGarden();
 		gardenSpots = new AConsumable[] {null, null, null};
 	}
 	
@@ -22,11 +20,11 @@ public class GardenManager extends UIManager {
 		AConsumable newConsumable = null;
 		switch(pos) {
 			case 0: case 1:
-				newConsumable = factory.getMealsFactory().getRandomConsumable();
+				newConsumable = GardenFactory.getMealsFactory().getRandomConsumable();
 				break;
 				
 			case 2:
-				newConsumable = factory.getDrugsFactory().getRandomConsumable();
+				newConsumable = GardenFactory.getDrugsFactory().getRandomConsumable();
 				break;
 			
 			default:

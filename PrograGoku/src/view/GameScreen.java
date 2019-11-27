@@ -270,7 +270,7 @@ public class GameScreen extends BasicGameState {
 			setPaused(!paused, false);
 		}
 		
-		if (input.isKeyPressed(Input.KEY_SPACE) && playerViewManager.isPlayingAnimation()) {
+		if (input.isKeyPressed(Input.KEY_SPACE) && playerViewManager.isPlayingAnimation() && !paused) {
 			playerViewManager.stopPlayingAnimation();
 		}
 		if (input.isKeyPressed(Input.KEY_ESCAPE) && paused && !dialogPause) {

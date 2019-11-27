@@ -6,5 +6,5 @@ public enum Mood {
 	Sleeping,
 	Sick,
 	Delicioso,
-	Meditanding;
+	Meditating;
 }

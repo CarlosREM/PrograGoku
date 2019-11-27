@@ -6,8 +6,4 @@ public class Loader {
 	  public static void load() {
     	   jloader = new jarLoader.Loader();
       }
-	  
-      public static GardenFactory getGarden() {
-    	  return jloader.garden;
-      }
 }

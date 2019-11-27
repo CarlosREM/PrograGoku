@@ -11,7 +11,9 @@ import ADT.ActivityPool;
 import ADT.ExtendedCharacter;
 import ADT.Fridge;
 import ADT.GameState;
+import abstraction.AActivity;
 import abstraction.AConsumable;
+import abstraction.ActivityType;
 import main.MainGame;
 import view.ColliderRect;
 
@@ -230,34 +232,43 @@ public class ActionSpotManager extends UIManager {
 			@Override
 			public void action() {
 				ArrayList<String> options = new ArrayList<>();
-				for (int i = 0; i < 10; i++)
-					options.add("Option "+i);
-				
+				AActivity activity;
+				for (String key : ActivityPool.getKeys()) {
+					activity = ActivityPool.getActivity(key);
+					if (activity.getLocation() == ActivityType.POOL ||
+						activity.getLocation() == ActivityType.ARENA ||
+						activity.getLocation() == ActivityType.FIELD)
+						options.add(activity.getName());
+				}
 				DialogManager.createDialog(DialogManager.TYPE_LIST, "Select a training activity:", options);
 				Thread dialogThread = new Thread() {
 					@Override
 					public void run() {
 						try {
 							String response = DialogManager.getDialogResponse();
-							switch(response) {
-							case "Option 0":
+							AActivity pickedActivity = ActivityPool.getActivity(response);
+							GameState.getInstance().getCharacter().visit(pickedActivity);
+							switch(pickedActivity.getLocation()) {
+							case POOL:
 								CharacterViewManager.getInstance()
 								.playAnimation(FixedActivityCoord.POOL1, FixedActivityCoord.POOL2,
 											   FixedActivityCoord.POOL1.x, FixedActivityCoord.POOL1.y + 64);
 								break;
 								
-							case "Option 1":
+							case ARENA:
 								CharacterViewManager.getInstance()
 								.playAnimation(FixedActivityCoord.ARENA1, FixedActivityCoord.ARENA2,
 											   FixedActivityCoord.ARENA1.x + 64, FixedActivityCoord.ARENA1.y);
 								break;
 								
-							case "Option 2":
+							case FIELD:
 								CharacterViewManager.getInstance()
 								.playAnimation(FixedActivityCoord.FIELD1, FixedActivityCoord.FIELD3,
 											   FixedActivityCoord.FIELD2.x, FixedActivityCoord.FIELD2.y);
 								break;
 								
+							default:
+								break;
 							}
 						}
 						catch (InterruptedException | SlickException e) {

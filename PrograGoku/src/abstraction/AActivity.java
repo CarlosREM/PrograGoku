@@ -2,11 +2,11 @@ package abstraction;
 
 import java.util.ArrayList;
 
-import management.FixedActivityCoord;
+import ADT.ExtendedCharacter;
 
 public abstract class AActivity implements IVisitor {
 	
-	public ActivityType location;
+	private ActivityType location;
 	private String name;
 	protected ArrayList<ASickness> sickness;
 	
@@ -32,4 +32,12 @@ public abstract class AActivity implements IVisitor {
 		sickness = new ArrayList<>();
 	}
 	
+	public void removeSicknesses(ExtendedCharacter character)
+	{
+		for(ASickness s : this.sickness) {
+			if(character.getSickness().contains(s)) {
+				character.getSickness().remove(s);
+			}
+		}
+	}
 }

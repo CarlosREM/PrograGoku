@@ -20,13 +20,4 @@ public class Meditate extends AActivity{
 		character.setMood(Mood.Meditating);
 		removeSicknesses(character);
 	}
-	
-	public void removeSicknesses(ExtendedCharacter character)
-	{
-		for(ASickness s : this.sickness) {
-			if(character.getSickness().contains(s)) {
-				character.getSickness().remove(s);
-			}
-		}
-	}
 }

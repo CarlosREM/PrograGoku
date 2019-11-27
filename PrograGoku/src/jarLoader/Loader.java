@@ -97,11 +97,17 @@ public class Loader {
 		DoPoop poop = new DoPoop();
 		Meditate meditate = new Meditate();
 		Sleep sleep = new Sleep();
+		Swim swim = new Swim();
+		Run run = new Run();
+		Play play = new Play();
 		
 		ActivityPool.addActivity(pee.getName(), pee);
 		ActivityPool.addActivity(poop.getName(), poop);
 		ActivityPool.addActivity(meditate.getName(), meditate);
 		ActivityPool.addActivity(sleep.getName(), sleep);
+		ActivityPool.addActivity(swim.getName(), swim);
+		ActivityPool.addActivity(run.getName(), run);
+		ActivityPool.addActivity(play.getName(), play);
 	}
 	
 	private void loadAbilities() {

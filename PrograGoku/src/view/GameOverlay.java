@@ -145,7 +145,7 @@ public class GameOverlay extends UIManager {
 			g.drawString(""+statMental,offsetX + 76 + 2, offsetY + 44 + 32 + 2);
 			g.drawString(""+statHunger, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44+ 2);
 			g.drawString(""+statPee, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2);
-			g.drawString(""+statPoop, offsetX + 76 + 150 + 16 + 76 + 2, offsetY + 44 + 32 + 2);
+			g.drawString(""+statPoop, offsetX + 76 + 150 + 16 + 76 + 2 + 76, offsetY + 44 + 32 + 2);
 		}
 		
 		// div

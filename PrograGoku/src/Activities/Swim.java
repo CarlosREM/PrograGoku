@@ -1,23 +1,22 @@
 package Activities;
 
 import ADT.ExtendedCharacter;
-import ADT.Mood;
 import ADT.SicknessPool;
 import abstraction.AActivity;
 import abstraction.ASickness;
 import abstraction.ActivityType;
 
-public class Sleep extends AActivity{
+public class Swim extends AActivity{
 
-	public Sleep() {
-		super("Sleep", ActivityType.BED);
-		this.sickness.add(SicknessPool.getSickness("Headache"));
+	public Swim() {
+		super("Swim", ActivityType.POOL);
+		this.sickness.add(SicknessPool.getSickness("Arthritis"));
+		this.sickness.add(SicknessPool.getSickness("Obesity"));
 	}
 
 	@Override
 	public void visit(ExtendedCharacter character) {
-		character.setFatigue(0);
-		character.setMood(Mood.Sleeping);
+		character.increaseMusculature(15);
 		removeSicknesses(character);
 	}
 }

@@ -122,6 +122,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 
 	public void visit(IVisitor visitor) {
 		String visitorName = visitor.getClass().getName();
+		System.out.println("Visitor name " + visitorName);
 		Proxy.log.append("Visited by: " + visitorName + "\n");
 		Proxy.log.append("Previous State: " + this.getFullState() + "\n");
 		visitor.visit(this);

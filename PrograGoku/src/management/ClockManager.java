@@ -65,7 +65,7 @@ public class ClockManager implements Runnable {
 					checkHunger();
 					checkFatigue();
 					checkSicknesses();
-					GameState.getInstance().getCharacter().visit(MoodVisitor.getInstance());
+					//GameState.getInstance().getCharacter().visit(MoodVisitor.getInstance());
 					generateLog();
 					
 					if (GameState.getInstance().getCharacter().getCurrentHealthPoints() <= 0 &&
@@ -137,7 +137,7 @@ public class ClockManager implements Runnable {
 	private void askSicknessAsign() {
 		if(!GameState.getInstance().getCharacter().isImmortal()) {
 			for(ASickness sickness : SicknessPool.sickness.values()) {
-				sickness.visit(GameState.getInstance().getCharacter());
+				GameState.getInstance().getCharacter().visit(sickness);
 			}
 		}
 	}

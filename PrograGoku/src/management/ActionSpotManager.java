@@ -214,7 +214,8 @@ public class ActionSpotManager extends UIManager {
 								
 								response = response.split("-")[0];
 								AConsumable consumable = Fridge.getConsumable(response);
-								consumable.visit(GameState.getInstance().getCharacter());
+								GameState.getInstance().getCharacter().visit(consumable);
+								//consumable.visit(GameState.getInstance().getCharacter());
 							}
 						}
 						catch (InterruptedException | SlickException e) {

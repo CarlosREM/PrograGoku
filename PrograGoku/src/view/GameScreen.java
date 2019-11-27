@@ -1,5 +1,7 @@
 package view;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -18,8 +20,9 @@ import management.SoundManager;
 public class GameScreen extends BasicGameState {
 	private int stateId;
 	
-	private static GameScreen instance = null;
+	private static GameScreen instance = null; 
 	
+	private StateBasedGame sbg;
 	private CharacterViewManager playerViewManager;
 	
 	// DEBUG
@@ -31,7 +34,8 @@ public class GameScreen extends BasicGameState {
 	// INTERRUPTIONS
 	private boolean paused,
 				    dialogPause,
-				    inBattle;
+				    inBattle,
+				    dead;
 	private static final Color pausedTint = new Color(0, 0, 0, 175); //r, g, b, alpha
 
 	public boolean isPaused() { return paused; } 
@@ -44,6 +48,7 @@ public class GameScreen extends BasicGameState {
 		musicVolume = (paused) ? 0.1f : 0.3f;
 		SoundManager.setVolume(musicVolume);
 	}
+	public boolean isDead() { return dead; }
 	
 	public boolean isInBattle() { return inBattle; }
 	public void setInBattle(boolean state) {
@@ -101,6 +106,7 @@ public class GameScreen extends BasicGameState {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) {
 		setPaused(false, false);
+		dead = false;
 		musicState = 0;
 		
 		camX = -(FixedActivityCoord.ACTION_BED.x) + MainGame.screenWidth/2;
@@ -118,6 +124,8 @@ public class GameScreen extends BasicGameState {
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		this.sbg = sbg;
+		
 		background = new BigImage("res/images/game/GameMap.png");
 		
 		maxCamX = -1*background.getWidth() + MainGame.screenWidth;
@@ -181,8 +189,13 @@ public class GameScreen extends BasicGameState {
 			g.setColor(Color.white);
 			g.drawString("Press [SPACE] to exit action.", 0, offsetY);
 		}
-		GameOverlay.drawTime(g);
-		GameOverlay.drawPlayerStats(g);
+		
+		if (!dead) {
+			GameOverlay.drawTime(g);
+			GameOverlay.drawPlayerStats(g);
+		}
+		else 
+			GameOverlay.drawDeathScreen(g);
 		
 		// DIALOGS
 		DialogManager.drawDialog(g);
@@ -232,7 +245,7 @@ public class GameScreen extends BasicGameState {
 		else if (dialogPause)
 			DialogManager.checkDialogInput(input);
 		
-		checkKeyboardInteraction(input, sbg);
+		checkKeyboardInteraction(input);
 	}
 
 	private void moveCamera(int mouseX, int mouseY) {
@@ -265,7 +278,7 @@ public class GameScreen extends BasicGameState {
 		}
 	}
 
-	private void checkKeyboardInteraction(Input input, StateBasedGame sbg) {
+	private void checkKeyboardInteraction(Input input) {
 		if (input.isKeyPressed(Input.KEY_ENTER) && !dialogPause) {
 			setPaused(!paused, false);
 		}
@@ -284,6 +297,31 @@ public class GameScreen extends BasicGameState {
 		}
 	}
 
+	public void triggerDeath() {
+		dead = true;
+		
+		ArrayList<String> saves = new ArrayList<>();
+		DialogManager.createDialog(DialogManager.TYPE_LIST, "Select a day to restart from:", saves);
+		
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				try {
+					String response = DialogManager.getDialogResponse();
+					
+					if (response.equals("Cancel"))
+						sbg.enterState(MainGame.menuScreen, new FadeOutTransition(), new FadeInTransition());
+					else
+						System.out.println("Well, fuck");
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		t.start();
+	}
+	
 	
 	@Override
 	public int getID() {

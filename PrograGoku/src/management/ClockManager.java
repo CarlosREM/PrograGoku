@@ -71,7 +71,12 @@ public class ClockManager implements Runnable {
 					checkFatigue();
 					checkSicknesses();
 					GameState.getInstance().getCharacter().visit(MoodVisitor.getInstance());
-					GameOverlay.update(GameState.getInstance().getCharacter());
+					
+					if (GameState.getInstance().getCharacter().getCurrentHealthPoints() <= 0 &&
+						!GameScreen.getInstance().isDead())
+						GameScreen.getInstance().triggerDeath();
+					else
+						GameOverlay.update(GameState.getInstance().getCharacter());
 				}
 			}
 			catch (InterruptedException e) {

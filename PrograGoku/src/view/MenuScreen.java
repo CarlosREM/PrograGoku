@@ -12,7 +12,6 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import ADT.ExtendedCharacter;
 import ADT.GameState;
 import main.MainGame;
-import management.ClockManager;
 import management.SoundManager;
 
 public class MenuScreen extends BasicGameState {

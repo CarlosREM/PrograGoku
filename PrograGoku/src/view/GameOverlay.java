@@ -23,7 +23,7 @@ public class GameOverlay extends UIManager {
 	//STATS - - -
 	private static String time = "23:00", date = "Day 31, Year 10";
 
-	private static String statMood = "Sleeping";
+	private static String statMood = "Happy";
 	private static float statEnergy = 50,
 					   	 statSleep = 50,
 					   	 statToilet = 50,
@@ -212,7 +212,7 @@ public class GameOverlay extends UIManager {
 				currentColor = redColor.brighter(5f);
 				break;
 				
-			case "Sleeping":
+			case "Sleeping": case "Meditating":
 				currentColor = Color.white;
 				break;
 				
@@ -245,7 +245,11 @@ public class GameOverlay extends UIManager {
 				break;
 				
 			case "Sleeping":
-				g.fillRect(offsetX + 32, offsetY + 80, 88, 8);
+				g.fillRect(offsetX + 24, offsetY + 80, 72, 8);
+				
+			case "Meditating":
+				g.fillRect(offsetX + 24, offsetY + 56, 32, 32);
+				g.fillRect(offsetX + 104, offsetY + 56, 32, 32);
 				
 				g.setColor(transpBlackColor);
 				g.fillRect(offsetX + 48, offsetY + 24, 16, 16);
@@ -264,5 +268,16 @@ public class GameOverlay extends UIManager {
 	
 	public static void drawCombatOverlay(Graphics g) {
 		
+	}
+	
+	public static void drawDeathScreen(Graphics g) {
+		g.setColor(redColor.multiply(transparentMultiplierColor));
+		g.fillRect(0, 0, MainGame.screenWidth, MainGame.screenHeight);
+
+		g.setColor(Color.white);
+		g.drawString("YOU HAVE DIED", MainGame.screenWidth/2 - 60, MainGame.screenHeight/3);
+		g.fillRect(MainGame.screenWidth/2 - 99, MainGame.screenHeight/3 + 24, 199, 3);
+		g.drawString("Select a day to return to", MainGame.screenWidth/2 - 112, MainGame.screenHeight/3 + 40);
+		g.drawString("or press [ESC] for the Title Screen", MainGame.screenWidth/2 - 156, MainGame.screenHeight/3 + 72);
 	}
 }

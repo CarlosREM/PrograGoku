@@ -7,6 +7,7 @@ import org.newdawn.slick.state.*;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import ADT.RecoveryPool;
 import main.MainGame;
 import management.ActionSpotManager;
 import management.ClockManager;
@@ -163,8 +164,6 @@ public class GameScreen extends BasicGameState {
 			g.fillOval(playerViewManager.getMoveX() - 8, playerViewManager.getMoveY() - 4, 16, 8);
 		}
 		
-
-		
 		// CHARACTER
 		playerViewManager.drawCharacter(g);
 
@@ -301,6 +300,9 @@ public class GameScreen extends BasicGameState {
 		dead = true;
 		
 		ArrayList<String> saves = new ArrayList<>();
+		for (String key : RecoveryPool.getKeys())
+			saves.add(key);
+		
 		DialogManager.createDialog(DialogManager.TYPE_LIST, "Select a day to restart from:", saves);
 		
 		Thread t = new Thread() {
@@ -308,11 +310,12 @@ public class GameScreen extends BasicGameState {
 			public void run() {
 				try {
 					String response = DialogManager.getDialogResponse();
-					
 					if (response.equals("Cancel"))
 						sbg.enterState(MainGame.menuScreen, new FadeOutTransition(), new FadeInTransition());
-					else
-						System.out.println("Well, fuck");
+					else {
+						ADT.GameState.setInstance(RecoveryPool.getState(response));
+						enter(null, sbg);
+					}
 				}
 				catch (InterruptedException e) {
 					e.printStackTrace();
@@ -321,7 +324,6 @@ public class GameScreen extends BasicGameState {
 		};
 		t.start();
 	}
-	
 	
 	@Override
 	public int getID() {

@@ -35,6 +35,21 @@ public class ExtendedCharacter extends DefaultCharacter {
 		this.hunger = 0;
 	}
 	
+	public ExtendedCharacter(ExtendedCharacter oldChar) {		
+		super(oldChar.getName(), new TreeMap<>(),  oldChar.getCurrentHealthPoints(), oldChar.getMaxHealthPoints(), 0, 1, 0, 0, 0, new ArrayList<>() , 0, 0);
+		this.mood = oldChar.getMood();
+		this.pee = oldChar.getPee();
+		this.poop = oldChar.getPoop();
+		this.isHurt = oldChar.isHurt();
+		this.mentalHealth = oldChar.getMentalHealth();
+		this.musculature = oldChar.getMusculature();
+		this.fatigue = oldChar.getFatigue();
+		this.sickness = new ArrayList<>();
+		sickness.addAll(oldChar.getSickness());
+		this.immortal = oldChar.isImmortal();
+		this.hunger = oldChar.getHunger();
+	}
+	
 	public int getHunger() {
 		return hunger;
 	}
@@ -45,7 +60,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 
 	@Override
 	public IPrototype deepClone() {
-		return null;
+		return new ExtendedCharacter(this);
 	}
 
 	public Mood getMood() {

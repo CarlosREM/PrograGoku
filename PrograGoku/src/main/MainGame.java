@@ -8,6 +8,7 @@ import management.ClockManager;
 import view.*;
 
 public class MainGame extends StateBasedGame {
+	
 	public static boolean debug = false;
 	
 	public static final int FPS = 180;
@@ -23,7 +24,7 @@ public class MainGame extends StateBasedGame {
 	public static final int menuScreen = 0,
 							gameScreen = 1;
 	
-	public MainGame(String gameName) {
+	private MainGame(String gameName) {
 		super(gameName);
 		this.addState(new MenuScreen(menuScreen));
 		this.addState(GameScreen.getInstance());

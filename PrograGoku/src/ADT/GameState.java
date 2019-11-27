@@ -1,14 +1,13 @@
 package ADT;
 
-import java.sql.Time;
-
 public class GameState {
 	private static GameState instance = null;
+	private static int maxYearDays;
+	private static int grow;
+	
 	private ExtendedCharacter character;
 	private int year = 1;
 	private int day = 1;
-	private static int maxYearDays;
-	private static int grow;
 	
 	public static void init(int maxYearDays,int grow) {
 		GameState.maxYearDays = maxYearDays;
@@ -16,9 +15,7 @@ public class GameState {
 	}
 	
 	
-	private GameState() {
-
-	}
+	private GameState() {}
 	
 	public static GameState getInstance() {
 		if(instance == null)
@@ -26,6 +23,18 @@ public class GameState {
 		return instance;
 	}
 
+	public static void newInstance() {
+		GameState newInstance = new GameState();
+		newInstance.setCharacter((ExtendedCharacter) instance.getCharacter().deepClone());
+		newInstance.setDay(instance.getDay());
+		newInstance.setYear(instance.getYear());
+		instance = newInstance;
+	}
+	
+	public static void setInstance(GameState newInstance) {
+		instance = newInstance;
+	}
+	
 	public ExtendedCharacter getCharacter() {
 		return character;
 	}
@@ -66,7 +75,7 @@ public class GameState {
 		this.year += 1;
 	}
 	public void levelUp() {
-		if (year%ADT.TimeConfig.getInstance().getGrow()==0) {
+		if (year % grow == 0) {
 			character.levelUp();
 		}
 	}	

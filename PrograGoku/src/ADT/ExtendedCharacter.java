@@ -160,7 +160,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 	}
 	
 	public void decreaseMentalHealth(int amount) {
-		this.mentalHealth += amount;
+		this.mentalHealth -= amount;
 		if(mentalHealth<0) {
 			this.mentalHealth = 0;
 		}		
@@ -204,9 +204,7 @@ public class ExtendedCharacter extends DefaultCharacter {
 	public void decreaseHunger(int amount) {
 		this.hunger -= amount;
 		if(hunger<0) {
-			    System.out.println("hunger"+hunger);
 				increaseMusculature(hunger);
-				System.out.println("musculature"+musculature);
 			}
 		}			
 	

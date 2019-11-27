@@ -12,7 +12,7 @@ public class Pizza extends AMeal{
 	@Override
 	public void visit(ExtendedCharacter character) {
 		this.raiseHealth(character);
-		this.raisePee(character);
+		this.raisePoop(character);
 	}
 
 }

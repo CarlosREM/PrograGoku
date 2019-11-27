@@ -5,16 +5,16 @@ import ADT.Mood;
 import ADT.SicknessPool;
 import abstraction.ASickness;
 
-public class Meditate extends AActivity{
+public class Socialize extends AActivity{
 
-	public Meditate() {
-		super("Meditate", ActivityType.TOILET);
+	public Socialize() {
+		super("Socialize", ActivityType.TOILET);
 		this.sickness.add(SicknessPool.getSickness("Depression"));
 	}
 
 	@Override
 	public void visit(ExtendedCharacter character) {
-		character.increaseMentalHealth(20);
+		character.increaseMentalHealth(30);
 		character.setMood(Mood.Meditanding);
 		removeSicknesses(character);
 	}

@@ -21,5 +21,6 @@ public class Senzu_Bean extends ADrug{
 			character.getSickness().clear();
 			character.setCurrentHealthPoints(100);
 			character.setMentalHealth(100);	
+			character.setMusculature(50);
 	}
 }

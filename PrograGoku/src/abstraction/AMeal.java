@@ -24,11 +24,11 @@ public abstract class AMeal extends AConsumable {
 	}
 	
 	public void raisePee(ExtendedCharacter character) {
-		character.increasePee(nutriment);
+		character.increasePee(nutriment+10);
 	}
 	
 	public void raisePoop(ExtendedCharacter character) {
-		character.increasePoop(nutriment);
+		character.increasePoop(nutriment+10);
 	}
 
 	public int getNutriment() {

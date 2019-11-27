@@ -23,8 +23,8 @@ public abstract class ADrug extends AConsumable{
 
 	@Override
 	public void visit(ExtendedCharacter character) {
-		for(ASickness s : character.getSickness()) {
-			if(this.sickness.contains(s)) {
+		for(ASickness s : this.sickness) {
+			if(character.getSickness().contains(s)) {
 				character.getSickness().remove(s);
 			}
 		}
